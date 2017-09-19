@@ -67,12 +67,15 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getHeaderView(0);
         imageView= (ImageView) findViewById(R.id.User_imageView);
         mName= (TextView) findViewById(R.id.user_name);
         mEmail= (TextView) findViewById(R.id.user_id);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getHeaderView(0);
+
 
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
