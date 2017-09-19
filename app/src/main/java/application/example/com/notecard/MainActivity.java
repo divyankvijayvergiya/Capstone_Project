@@ -16,11 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     private String photo;
     private Uri photoUri;
     private ImageView imageView;
+    private TextView mName, mEmail;
 
 
     @Override
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getHeaderView(0);
+        imageView= (ImageView) findViewById(R.id.User_imageView);
+        mName= (TextView) findViewById(R.id.user_name);
+        mEmail= (TextView) findViewById(R.id.user_id);
+
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -75,6 +82,9 @@ public class MainActivity extends AppCompatActivity
                     name=firebaseUser.getDisplayName();
                     photo=firebaseUser.getPhotoUrl().toString();
                     email=firebaseUser.getEmail();
+                    Picasso.with(MainActivity.this).load(photo).into(imageView);
+                    mName.setText(name);
+                    mEmail.setText(email);
                 }
                 else{
                     startActivityForResult(
