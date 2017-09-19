@@ -86,7 +86,13 @@ public class MainActivity extends AppCompatActivity
                     name=firebaseUser.getDisplayName();
                     photo=firebaseUser.getPhotoUrl().toString();
                     email=firebaseUser.getEmail();
-                    Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
+                    if(imageView!=null) {
+                        Picasso.with(MainActivity.this).load(photo).into(imageView);
+                    }else {
+                        Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
+
+
+                    }
                     mName.setText(name);
                     mEmail.setText(email);
                 }
