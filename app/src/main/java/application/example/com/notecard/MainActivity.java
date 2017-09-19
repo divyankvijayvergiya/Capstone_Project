@@ -70,11 +70,12 @@ public class MainActivity extends AppCompatActivity
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        imageView= (ImageView) findViewById(R.id.User_imageView);
-        mName= (TextView) findViewById(R.id.user_name);
-        mEmail= (TextView) findViewById(R.id.user_id);
+        View view= navigationView.getHeaderView(0);
+
+        imageView= (ImageView) view.findViewById(R.id.User_imageView);
+        mName= (TextView) view.findViewById(R.id.user_name);
+        mEmail= (TextView) view.findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getHeaderView(0);
 
 
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
