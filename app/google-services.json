@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "731615631669",
+    "firebase_url": "https://notecard-c9f3f.firebaseio.com",
+    "project_id": "notecard-c9f3f",
+    "storage_bucket": "notecard-c9f3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731615631669:android:220327b7381b76a9",
+        "android_client_info": {
+          "package_name": "application.example.com.notecard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731615631669-0lh0gr3msnbjoqbilecn52js1ljk151d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "application.example.com.notecard",
+            "certificate_hash": "ed2bb29d54b9f33f0e744480705925ada93d1f6b"
+          }
+        },
+        {
+          "client_id": "731615631669-vup5mg7346b72kqdo17tgefia760rqgq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbISnXwKIfZsxEOzTmpVMPq3pw_ZirHfA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731615631669-vup5mg7346b72kqdo17tgefia760rqgq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
