@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/note_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_speaker_notes_black_24px" />
@@ -28,9 +29,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:layout_marginLeft="4dp"/>
+            android:layout_marginLeft="4dp"
+            android:id="@+id/title_note"/>
 
             <TextView
+                android:id="@+id/name_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"

@@ -7,10 +7,12 @@ package application.example.com.notecard;
 public class Users {
 
     private String photoUrl;
+    private String title;
     private String name;
     private String email;
-    public Users(String photoUrl, String name, String email){
+    public Users(String photoUrl, String title,String name, String email){
         this.photoUrl=photoUrl;
+        this.title=title;
         this.name=name;
         this.email=email;
     }
@@ -20,6 +22,13 @@ public class Users {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getName() {
