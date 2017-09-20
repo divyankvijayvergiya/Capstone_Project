@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private Uri photoUri;
     private ImageView imageView;
     private TextView mName, mEmail;
+    private DrawerLayout drawer;
 
 
     @Override
@@ -56,12 +57,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager fragmentManager=getSupportFragmentManager();
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -76,6 +76,11 @@ public class MainActivity extends AppCompatActivity
         mName= (TextView) view.findViewById(R.id.user_name);
         mEmail= (TextView) view.findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        MyStoriesFragment myStoriesFragment=new MyStoriesFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.frame_stories,myStoriesFragment)
+                .commit();
 
 
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
@@ -83,16 +88,19 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
                 if(firebaseUser!=null) {
-                    name=firebaseUser.getDisplayName();
-                    photo=firebaseUser.getPhotoUrl().toString();
-                    email=firebaseUser.getEmail();
-                    if(imageView!=null) {
-                        Picasso.with(MainActivity.this).load(photo).into(imageView);
-                    }else {
-                        Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
-
-
+                    if(name!=null) {
+                        name = firebaseUser.getDisplayName();
                     }
+                    else {
+                        mName.setText(name);
+                    }
+                    if(photo!=null) {
+                        photo = firebaseUser.getPhotoUrl().toString();
+                    }
+                    email=firebaseUser.getEmail();
+
+                    Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
+
                     mName.setText(name);
                     mEmail.setText(email);
                 }
@@ -154,16 +162,28 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_notes) {
-            // Handle the camera action
+
+            FragmentManager fragmentManager=getSupportFragmentManager();
+            MyStoriesFragment myStoriesFragment=new MyStoriesFragment();
+            fragmentManager.beginTransaction()
+                    .add(R.id.frame_stories,myStoriesFragment)
+                    .commit();
+
 
         } else if (id == R.id.nav_feedback) {
 
+
         } else if (id == R.id.nav_profile) {
+
 
         } else if (id == R.id.nav_manage) {
 
+
         } else if (id == R.id.nav_share) {
 
+        }
+        else if (id== R.id.nav_logout){
+            AuthUI.getInstance().signOut(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
