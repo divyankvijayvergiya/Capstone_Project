@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager=getSupportFragmentManager();
+                StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.frame_stories,storyCreateFragment)
+                        .commit();
             }
         });
 
