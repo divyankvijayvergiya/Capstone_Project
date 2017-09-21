@@ -67,7 +67,7 @@ public class MyStoriesFragment extends Fragment  {
                Users.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
             @Override
             protected void populateViewHolder(final NoteViewHolder viewHolder, Users model, int position) {
-                String noteId=getRef(position).getKey();
+                final String noteId=getRef(position).getKey();
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
