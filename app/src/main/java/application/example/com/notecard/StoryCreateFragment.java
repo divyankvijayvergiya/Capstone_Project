@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,14 +55,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
                 .child(firebaseAuth.getCurrentUser().getUid());
-        String title = getArguments().getString("title","" );
-        if(!title.equals("")){
-            Log.e("Title", title);
-        }
-        String content=getArguments().getString("content","");
-        if(!content.equals("")){
-            Log.e("Content",content);
-        }
+      
 
 
         return rootView;
