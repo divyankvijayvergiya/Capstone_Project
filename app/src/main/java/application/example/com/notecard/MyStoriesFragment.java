@@ -71,8 +71,9 @@ public class MyStoriesFragment extends Fragment  {
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String title=dataSnapshot.child("title").getValue().toString();
-                        String time=dataSnapshot.child("timeStamp").getValue().toString();
+                        final String title=dataSnapshot.child("title").getValue().toString();
+                        final String time=dataSnapshot.child("timeStamp").getValue().toString();
+                        final String content=dataSnapshot.child("content").getValue().toString();
                         viewHolder.setNodeTitle(title);
                         viewHolder.setTime(time);
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +81,10 @@ public class MyStoriesFragment extends Fragment  {
                             public void onClick(View v) {
                                 FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
                                 StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
+                                Bundle b=new Bundle();
+                                b.putString("title",title);
+                                b.putString("content",content);
+                                storyCreateFragment.setArguments(b);
                                 fragmentManager.beginTransaction()
                                         .add(R.id.frame_stories,storyCreateFragment)
                                         .commit();

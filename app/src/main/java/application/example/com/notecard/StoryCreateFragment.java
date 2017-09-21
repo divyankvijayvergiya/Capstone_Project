@@ -38,7 +38,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
    public String not;
 
 
-    public StoryCreateFragment() {
+    public StoryCreateFragment( ) {
 
     }
 
