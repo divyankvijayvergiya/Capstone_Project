@@ -58,6 +58,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         public final ImageView notePic;
         public final TextView title;
         public final TextView mUserName;
+        public final TextView time;
 
         public StoryViewHolder(View itemView) {
 
@@ -65,6 +66,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             notePic=(ImageView)itemView.findViewById(R.id.note_pic);
             title= (TextView) itemView.findViewById(R.id.title_note);
             mUserName= (TextView) itemView.findViewById(R.id.name_user);
+            time=(TextView)itemView.findViewById(R.id.time_note);
             itemView.setOnClickListener(this);
 
 
@@ -77,6 +79,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
                 }
                 title.setText(usersArrayList.get(position).getTitle());
                 mUserName.setText(usersArrayList.get(position).getName());
+                time.setText(usersArrayList.get(position).getNoteTime());
+
             }
 
         }

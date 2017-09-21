@@ -10,11 +10,16 @@ public class Users {
     private String title;
     private String name;
     private String email;
-    public Users(String photoUrl, String title,String name, String email){
+
+
+
+    private String noteTime;
+    public Users(String photoUrl, String title,String name, String email, String noteTime){
         this.photoUrl=photoUrl;
         this.title=title;
         this.name=name;
         this.email=email;
+        this.noteTime=noteTime;
     }
     public String getPhotoUrl() {
         return photoUrl;
@@ -45,6 +50,13 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getNoteTime() {
+        return noteTime;
+    }
+
+    public void setNoteTime(String noteTime) {
+        this.noteTime = noteTime;
     }
 
 }
