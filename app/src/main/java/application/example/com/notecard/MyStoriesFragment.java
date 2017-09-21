@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,17 +46,7 @@ public class MyStoriesFragment extends Fragment  {
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        CardView cardView= (CardView) rootView.findViewById(R.id.card_view);
-       mRecyclerView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-               StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
-               fragmentManager.beginTransaction()
-                       .add(R.id.frame_stories,storyCreateFragment)
-                       .commit();
-           }
-       });
+
 
 
         firebaseAuth=FirebaseAuth.getInstance();
@@ -86,6 +75,17 @@ public class MyStoriesFragment extends Fragment  {
                         String time=dataSnapshot.child("timeStamp").getValue().toString();
                         viewHolder.setNodeTitle(title);
                         viewHolder.setTime(time);
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                                StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
+                                fragmentManager.beginTransaction()
+                                        .add(R.id.frame_stories,storyCreateFragment)
+                                        .commit();
+
+                            }
+                        });
                     }
 
                     @Override

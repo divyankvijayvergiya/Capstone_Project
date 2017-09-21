@@ -35,6 +35,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth;
     public int index=0;
+   public String not;
 
 
     public StoryCreateFragment() {
