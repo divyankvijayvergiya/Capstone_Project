@@ -56,12 +56,13 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
                 .child(firebaseAuth.getCurrentUser().getUid());
-        String title = getArguments().getString("title", "");
-        if(!title.equals("")){
+        Users user=new Users();
+        String title = getArguments().getString("title",user.getTitle() );
+        if(!title.equals(user.getTitle())){
             Log.e("Title", title);
         }
-        String content=getArguments().getString("content","");
-        if(!content.equals("")){
+        String content=getArguments().getString("content",user.getContent());
+        if(!content.equals(user.getContent())){
             Log.e("Content",content);
         }
 
