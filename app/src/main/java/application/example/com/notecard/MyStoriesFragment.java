@@ -3,12 +3,15 @@ package application.example.com.notecard;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,13 +26,14 @@ import java.util.ArrayList;
  * Created by Dell on 20-09-2017.
  */
 
-public class MyStoriesFragment extends Fragment implements StoryAdapter.ListItemClickListener {
+public class MyStoriesFragment extends Fragment  {
     private RecyclerView mRecyclerView;
     private ArrayList<Users> mUserArrayList;
-    private StoryAdapter mAdapter;
+
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private ChildEventListener mChildEventListener;
+   private  int index=0;
 
     public MyStoriesFragment(){
 
@@ -43,28 +47,26 @@ public class MyStoriesFragment extends Fragment implements StoryAdapter.ListItem
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter=new StoryAdapter(this, mUserArrayList);
-        mRecyclerView.setAdapter(mAdapter);
+        CardView cardView= (CardView) rootView.findViewById(R.id.card_view);
+       mRecyclerView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+               StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
+               fragmentManager.beginTransaction()
+                       .add(R.id.frame_stories,storyCreateFragment)
+                       .commit();
+           }
+       });
+
+
         firebaseAuth=FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser()!=null){
             databaseReference= FirebaseDatabase.getInstance().getReference().child("nodes")
                     .child(firebaseAuth.getCurrentUser().getUid());
         }
 
-        databaseReference.child("nodes").addValueEventListener(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String title=dataSnapshot.child("title").getValue().toString();
-                String timeStamp=dataSnapshot.child("timeStamp").getValue().toString();
-                
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         return rootView;
     }
@@ -72,13 +74,33 @@ public class MyStoriesFragment extends Fragment implements StoryAdapter.ListItem
     @Override
     public void onStart() {
         super.onStart();
-        mRecyclerView.setAdapter(mAdapter);
-    }
+        FirebaseRecyclerAdapter<Users, NoteViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Users, NoteViewHolder>(
+               Users.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
+            @Override
+            protected void populateViewHolder(final NoteViewHolder viewHolder, Users model, int position) {
+                String noteId=getRef(position).getKey();
+                databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String title=dataSnapshot.child("title").getValue().toString();
+                        String time=dataSnapshot.child("timeStamp").getValue().toString();
+                        viewHolder.setNodeTitle(title);
+                        viewHolder.setTime(time);
+                    }
 
-    @Override
-    public void onListItemClick(int clickItemIndex) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
+                    }
+                });
+
+            }
+        };
+        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
     }
 
 
 }
+
+
+

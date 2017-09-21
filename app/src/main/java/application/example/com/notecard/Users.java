@@ -10,10 +10,10 @@ public class Users {
     private String title;
     private String name;
     private String email;
-
-
-
     private String noteTime;
+    public Users(){
+
+    }
     public Users(String photoUrl, String title,String name, String email, String noteTime){
         this.photoUrl=photoUrl;
         this.title=title;

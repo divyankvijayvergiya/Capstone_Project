@@ -55,6 +55,7 @@
             android:paddingRight="64dp"
             android:paddingBottom="28dp"
             android:clipToPadding="false"
+            android:background="@android:color/holo_blue_bright"
             ></FrameLayout>
 
 

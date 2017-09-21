@@ -34,6 +34,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     private ImageButton btDelete;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth;
+    public int index=0;
 
 
     public StoryCreateFragment() {
@@ -78,6 +79,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     private void createNote(String title, String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
+            Users users=new Users();
             final Map noteMap = new HashMap();
             noteMap.put("title", title);
             noteMap.put("content", content);
