@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,8 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth;
     public int index=0;
-   public String not;
+    public final String TITLE="title" ;
+    public final String CONTENT="content";
 
 
     public StoryCreateFragment( ) {
@@ -55,10 +57,23 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
                 .child(firebaseAuth.getCurrentUser().getUid());
-      
+        if (getArguments() != null) {
+
+            Log.i("This is my title: ", getArguments().getString(TITLE, ""));
+            Log.i("This is my content: ", getArguments().getString(CONTENT,""));
+            etTitle.setText(getArguments().getString(TITLE,""));
+            etNote.setText(getArguments().getString(CONTENT,""));
+        }
+
 
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
