@@ -150,7 +150,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getContext(),"Node Deleted",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Notes Deleted",Toast.LENGTH_SHORT).show();
                     noteId="no";
                     noteId2="kk";
                     try {
