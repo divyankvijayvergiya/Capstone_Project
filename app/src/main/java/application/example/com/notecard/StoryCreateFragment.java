@@ -40,8 +40,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     public int index=0;
     public final String TITLE="title" ;
     public final String CONTENT="content";
-    private String noteId="no";
-    private String noteId2="kk";
+    private String noteId;
 
 
     public StoryCreateFragment( ) {
@@ -69,14 +68,8 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
             Log.i("This is my content: ", getArguments().getString(CONTENT,""));
             etTitle.setText(getArguments().getString(TITLE,""));
             etNote.setText(getArguments().getString(CONTENT,""));
-            try{
-                noteId=getArguments().getString(TITLE);
-                noteId2=getArguments().getString(CONTENT);
+            noteId=getArguments().getString("key","");
 
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
         }
 
 
@@ -97,7 +90,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                 Snackbar.make(getView(), "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
-            if(!noteId.equals("no") && !noteId2.equals("kk")){
+            if(!noteId.equals("key")){
                 deleteNote();
             }
 
@@ -146,8 +139,8 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(getContext(),"Notes Deleted",Toast.LENGTH_SHORT).show();
-                    noteId="no";
-                    noteId2="kk";
+                    noteId="key";
+
 
 
 

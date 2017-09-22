@@ -77,6 +77,7 @@ public class MyStoriesFragment extends Fragment  {
                             final String title = dataSnapshot.child(TITLE).getValue().toString();
                             final String time = dataSnapshot.child(TIMESTAMP).getValue().toString();
                             final String content = dataSnapshot.child(CONTENT).getValue().toString();
+                            final String key=dataSnapshot.getKey();
                             viewHolder.setNodeTitle(title);
                             viewHolder.setTime(time);
                             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +88,7 @@ public class MyStoriesFragment extends Fragment  {
                                     Bundle b = new Bundle();
                                     b.putString(TITLE, title);
                                     b.putString(CONTENT, content);
+                                    b.putString("key",key);
                                     storyCreateFragment.setArguments(b);
                                     fragmentManager.beginTransaction()
                                             .add(R.id.frame_stories, storyCreateFragment)
