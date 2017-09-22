@@ -1,6 +1,7 @@
 package application.example.com.notecard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,11 +58,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager=getSupportFragmentManager();
-                StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
-                fragmentManager.beginTransaction()
-                        .add(R.id.frame_stories,storyCreateFragment)
-                        .commit();
+                Intent intent=new Intent(MainActivity.this,StoryCreateActivity.class);
+                startActivity(intent);
             }
         });
 

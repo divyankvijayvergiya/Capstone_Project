@@ -1,9 +1,9 @@
 package application.example.com.notecard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -83,16 +83,11 @@ public class MyStoriesFragment extends Fragment  {
                             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                    StoryCreateFragment storyCreateFragment = new StoryCreateFragment();
-                                    Bundle b = new Bundle();
-                                    b.putString(TITLE, title);
-                                    b.putString(CONTENT, content);
-                                    b.putString("key",key);
-                                    storyCreateFragment.setArguments(b);
-                                    fragmentManager.beginTransaction()
-                                            .add(R.id.frame_stories, storyCreateFragment)
-                                            .commit();
+                                    Intent intent=new Intent(getActivity(),StoryCreateActivity.class);
+                                    intent.putExtra(TITLE,title);
+                                    intent.putExtra(CONTENT,content);
+                                    intent.putExtra("key",key);
+                                    startActivity(intent);
 
                                 }
                             });
