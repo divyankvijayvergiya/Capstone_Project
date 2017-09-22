@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -39,6 +41,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     public final String TITLE="title" ;
     public final String CONTENT="content";
     private String noteId="no";
+    private String noteId2="kk";
 
 
     public StoryCreateFragment( ) {
@@ -49,13 +52,8 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story_create, container, false);
-        try{
-            noteId=getActivity().getIntent().getStringExtra("noteId");
+        setHasOptionsMenu(true);
 
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
         etNote = (EditText) rootView.findViewById(R.id.script);
         etTitle = (EditText) rootView.findViewById(R.id.title_name);
         btDone = (ImageButton) rootView.findViewById(R.id.button_done);
@@ -71,6 +69,14 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
             Log.i("This is my content: ", getArguments().getString(CONTENT,""));
             etTitle.setText(getArguments().getString(TITLE,""));
             etNote.setText(getArguments().getString(CONTENT,""));
+            try{
+                noteId=getArguments().getString(TITLE);
+                noteId2=getArguments().getString(CONTENT);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
 
@@ -96,7 +102,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                 Snackbar.make(getView(), "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
-            if(!noteId.equals("nodes")){
+            if(!noteId.equals("no") && !noteId2.equals("kk")){
                 deleteNote();
             }
 
@@ -146,6 +152,12 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                 if(task.isSuccessful()){
                     Toast.makeText(getContext(),"Node Deleted",Toast.LENGTH_SHORT).show();
                     noteId="no";
+                    noteId2="kk";
+                    try {
+                        finalize();
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
 
 
                 }
@@ -157,6 +169,19 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
 
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
 
     }
 }
