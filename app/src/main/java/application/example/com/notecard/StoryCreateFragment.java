@@ -38,6 +38,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     public int index=0;
     public final String TITLE="title" ;
     public final String CONTENT="content";
+    private String noteId="no";
 
 
     public StoryCreateFragment( ) {
@@ -48,6 +49,13 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story_create, container, false);
+        try{
+            noteId=getActivity().getIntent().getStringExtra("noteId");
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         etNote = (EditText) rootView.findViewById(R.id.script);
         etTitle = (EditText) rootView.findViewById(R.id.title_name);
         btDone = (ImageButton) rootView.findViewById(R.id.button_done);
@@ -88,6 +96,9 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                 Snackbar.make(getView(), "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
+            if(!noteId.equals("no")){
+                deleteNote();
+            }
 
         }
 
@@ -96,7 +107,6 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
     private void createNote(String title, String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
-            Users users=new Users();
             final Map noteMap = new HashMap();
             noteMap.put("title", title);
             noteMap.put("content", content);
@@ -128,5 +138,25 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
         } else {
             Toast.makeText(getActivity(), "User is not Signed in", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void deleteNote(){
+        mDatabaseReference.child(noteId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getContext(),"Node Deleted",Toast.LENGTH_SHORT).show();
+                    noteId="no";
+
+
+                }
+                else {
+                    Log.e("StoryCreateFragment",task.getException().toString());
+                    Toast.makeText(getContext(),"ERROR: "+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
     }
 }

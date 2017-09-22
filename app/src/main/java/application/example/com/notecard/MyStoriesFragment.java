@@ -73,26 +73,28 @@ public class MyStoriesFragment extends Fragment  {
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        final String title=dataSnapshot.child(TITLE).getValue().toString();
-                        final String time=dataSnapshot.child(TIMESTAMP).getValue().toString();
-                        final String content=dataSnapshot.child(CONTENT).getValue().toString();
-                        viewHolder.setNodeTitle(title);
-                        viewHolder.setTime(time);
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                                StoryCreateFragment storyCreateFragment=new StoryCreateFragment();
-                                Bundle b=new Bundle();
-                                b.putString(TITLE,title);
-                                b.putString(CONTENT,content);
-                                storyCreateFragment.setArguments(b);
-                                fragmentManager.beginTransaction()
-                                        .add(R.id.frame_stories,storyCreateFragment)
-                                        .commit();
+                        if (dataSnapshot.hasChild(TITLE) && dataSnapshot.hasChild(TIMESTAMP) && dataSnapshot.hasChild(CONTENT)) {
+                            final String title = dataSnapshot.child(TITLE).getValue().toString();
+                            final String time = dataSnapshot.child(TIMESTAMP).getValue().toString();
+                            final String content = dataSnapshot.child(CONTENT).getValue().toString();
+                            viewHolder.setNodeTitle(title);
+                            viewHolder.setTime(time);
+                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                    StoryCreateFragment storyCreateFragment = new StoryCreateFragment();
+                                    Bundle b = new Bundle();
+                                    b.putString(TITLE, title);
+                                    b.putString(CONTENT, content);
+                                    storyCreateFragment.setArguments(b);
+                                    fragmentManager.beginTransaction()
+                                            .add(R.id.frame_stories, storyCreateFragment)
+                                            .commit();
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
 
                     @Override
