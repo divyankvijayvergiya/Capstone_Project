@@ -84,11 +84,6 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
 
     @Override
     public void onClick(View v) {
