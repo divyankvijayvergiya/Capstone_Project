@@ -96,7 +96,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                 Snackbar.make(getView(), "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
-            if(!noteId.equals("no")){
+            if(!noteId.equals("nodes")){
                 deleteNote();
             }
 
