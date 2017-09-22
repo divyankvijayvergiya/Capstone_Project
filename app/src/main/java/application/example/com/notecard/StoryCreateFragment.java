@@ -153,11 +153,7 @@ public class StoryCreateFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getContext(),"Notes Deleted",Toast.LENGTH_SHORT).show();
                     noteId="no";
                     noteId2="kk";
-                    try {
-                        finalize();
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
+
 
 
                 }
