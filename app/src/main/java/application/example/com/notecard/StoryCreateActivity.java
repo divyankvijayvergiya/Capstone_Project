@@ -83,8 +83,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
             final Map noteMap = new HashMap();
-            noteMap.put("title", title);
-            noteMap.put("content", content);
+            noteMap.put(TITLE, title);
+            noteMap.put(CONTENT, content);
             noteMap.put("timeStamp", ServerValue.TIMESTAMP);
             Thread mainThread = new Thread(new Runnable() {
                 @Override
@@ -136,5 +136,16 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
+    }
+    private void updateData(String title, String content){
+        if(firebaseAuth.getCurrentUser()!=null){
+            String key = mDatabaseReference.child("nodes").push().getKey();
+            HashMap<String, Object> result = new HashMap<>();
+            result.put(TITLE, title);
+            result.put(CONTENT, content);
+            result.put("timeStamp", ServerValue.TIMESTAMP );
+
+
+        }
     }
 }

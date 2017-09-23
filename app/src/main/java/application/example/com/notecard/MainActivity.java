@@ -66,11 +66,7 @@ public class MainActivity extends AppCompatActivity
         mName = (TextView) view.findViewById(R.id.user_name);
         mEmail = (TextView) view.findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MyStoriesFragment myStoriesFragment = new MyStoriesFragment();
-        fragmentManager.beginTransaction()
-                .add(R.id.frame_stories, myStoriesFragment)
-                .commit();
+
 
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -92,11 +88,17 @@ public class MainActivity extends AppCompatActivity
 
                     mName.setText(name);
                     mEmail.setText(email);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    MyStoriesFragment myStoriesFragment = new MyStoriesFragment();
+                    fragmentManager.beginTransaction()
+                            .add(R.id.frame_stories, myStoriesFragment)
+                            .commit();
+
                 } else {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(true)
+                                    .setIsSmartLockEnabled(false)
                                     .setProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
 
