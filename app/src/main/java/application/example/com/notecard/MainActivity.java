@@ -1,8 +1,6 @@
 package application.example.com.notecard;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -29,28 +26,20 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final int RC_SIGN_IN = 1;
-    private static final String TAG = "MainActivity";
-    private String idToken;
-
-    private final Context mContext = this;
-    private GoogleApiClient mGoogleApiClient;
-
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private String name, email;
     private String photo;
-    private Uri photoUri;
     private ImageView imageView;
     private TextView mName, mEmail;
     private DrawerLayout drawer;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mFirebaseAuth=FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,55 +47,52 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,StoryCreateActivity.class);
+                Intent intent = new Intent(MainActivity.this, StoryCreateActivity.class);
                 startActivity(intent);
             }
         });
 
-         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View view= navigationView.getHeaderView(0);
+        View view = navigationView.getHeaderView(0);
 
-        imageView= (ImageView) view.findViewById(R.id.User_imageView);
-        mName= (TextView) view.findViewById(R.id.user_name);
-        mEmail= (TextView) view.findViewById(R.id.user_id);
+        imageView = (ImageView) view.findViewById(R.id.User_imageView);
+        mName = (TextView) view.findViewById(R.id.user_name);
+        mEmail = (TextView) view.findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        MyStoriesFragment myStoriesFragment=new MyStoriesFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MyStoriesFragment myStoriesFragment = new MyStoriesFragment();
         fragmentManager.beginTransaction()
-                .add(R.id.frame_stories,myStoriesFragment)
+                .add(R.id.frame_stories, myStoriesFragment)
                 .commit();
 
 
-        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
-                if(firebaseUser!=null) {
-                    if(name!=null) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser != null) {
+                    if (name != null) {
                         name = firebaseUser.getDisplayName();
-                    }
-                    else {
+                    } else {
                         mName.setText(name);
                     }
-                    if(photo!=null) {
+                    if (photo != null) {
                         photo = firebaseUser.getPhotoUrl().toString();
                     }
-                    email=firebaseUser.getEmail();
+                    email = firebaseUser.getEmail();
 
                     Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
 
                     mName.setText(name);
                     mEmail.setText(email);
-                }
-                else{
+                } else {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -118,11 +104,10 @@ public class MainActivity extends AppCompatActivity
                                     .build(),
                             RC_SIGN_IN);
                 }
-                }
+            }
 
-            };
-        }
-
+        };
+    }
 
 
     @Override
@@ -136,7 +121,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -145,10 +129,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_notes) {
 
-            FragmentManager fragmentManager=getSupportFragmentManager();
-            MyStoriesFragment myStoriesFragment=new MyStoriesFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            MyStoriesFragment myStoriesFragment = new MyStoriesFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.frame_stories,myStoriesFragment)
+                    .add(R.id.frame_stories, myStoriesFragment)
                     .commit();
 
 
@@ -163,8 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        }
-        else if (id== R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
             AuthUI.getInstance().signOut(this);
         }
 
@@ -174,12 +157,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
