@@ -48,7 +48,7 @@ public class MyStoriesFragment extends Fragment  {
 
         firebaseAuth=FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser()!=null){
-            databaseReference= FirebaseDatabase.getInstance().getReferenceFromUrl("https://notecard-c9f3f.firebaseio.com/").child("nodes")
+            databaseReference= FirebaseDatabase.getInstance().getReference().child("nodes")
                     .child(firebaseAuth.getCurrentUser().getUid());
         }
 
