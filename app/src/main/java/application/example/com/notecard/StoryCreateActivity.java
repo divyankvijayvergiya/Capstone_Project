@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,6 +48,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_story_create);
+        Toolbar toolbar= (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         etNote = (EditText)findViewById(R.id.script);
         etTitle = (EditText)findViewById(R.id.title_name);
         btDone = (ImageButton)findViewById(R.id.button_done);
@@ -204,4 +211,26 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.story_create_menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        if(id==R.id.action_video){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

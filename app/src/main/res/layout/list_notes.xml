@@ -28,21 +28,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
+            android:layout_marginTop="4dp"
             android:layout_marginLeft="4dp"
             android:id="@+id/title_note"/>
-
-            <TextView
-                android:id="@+id/name_user"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
-                android:layout_marginLeft="4dp"/>
+                android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/time_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="time"
+                android:layout_marginTop="12dp"
                 android:layout_marginLeft="4dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PERSONAL"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/com_facebook_blue"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="80dp"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

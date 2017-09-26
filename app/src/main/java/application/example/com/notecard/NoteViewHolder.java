@@ -17,7 +17,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         mView=itemView;
         textTitle= (TextView) mView.findViewById(R.id.title_note);
         textTime= (TextView) mView.findViewById(R.id.time_note);
-        textName= (TextView) mView.findViewById(R.id.name_user);
         noteImage= (ImageView) mView.findViewById(R.id.note_pic);
     }
     public void setNodeTitle(String title){
@@ -29,11 +28,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
     }
-    public void setUserName(String name){
-        textName.setText(name);
 
-
-    }
     public void setImage(int image){
         noteImage.setImageResource(image);
 
