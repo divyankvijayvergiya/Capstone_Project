@@ -7,24 +7,23 @@ package application.example.com.notecard;
 public class Users {
 
     private String photoUrl;
-    private String title;
     private String name;
     private String email;
-    private String noteTime;
 
 
 
-    private String content;
+
+
     public Users(){
 
     }
-    public Users(String photoUrl, String title,String name, String email, String noteTime, String content){
+    public Users(String photoUrl,String name, String email){
         this.photoUrl=photoUrl;
-        this.title=title;
+
         this.name=name;
         this.email=email;
-        this.noteTime=noteTime;
-        this.content=content;
+
+
     }
     public String getPhotoUrl() {
         return photoUrl;
@@ -33,13 +32,7 @@ public class Users {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getName() {
         return name;
@@ -56,19 +49,6 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getNoteTime() {
-        return noteTime;
-    }
 
-    public void setNoteTime(String noteTime) {
-        this.noteTime = noteTime;
-    }
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     public final String TITLE="title" ;
     public final String CONTENT="content";
     private String noteId;
+    private ImageButton btEdit;
+    private TextView tvSave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         etTitle = (EditText)findViewById(R.id.title_name);
         btDone = (ImageButton)findViewById(R.id.button_done);
         btDelete = (ImageButton)findViewById(R.id.button_delete);
+        btEdit= (ImageButton) findViewById(R.id.button_update);
+        tvSave= (TextView) findViewById(R.id.text_save);
+        btEdit.setOnClickListener(this);
+        tvSave.setOnClickListener(this);
         btDone.setOnClickListener(this);
         btDelete.setOnClickListener(this);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -55,6 +62,18 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             etTitle.setText(intent.getStringExtra(TITLE));
             etNote.setText(intent.getStringExtra(CONTENT));
             noteId=getIntent().getStringExtra("key");
+            if (noteId!=null){
+                btDone.setVisibility(View.GONE);
+            }
+            else {
+                btEdit.setVisibility(View.GONE);
+                tvSave.setVisibility(View.GONE);
+            }
+
+
+
+
+
         }
 
     }
@@ -67,12 +86,39 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 createNote(title, content);
-            } else {
+
+
+
+            }
+            else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
             if(!noteId.equals("key")){
                 deleteNote();
+            }
+
+        }
+        else if(v==btEdit){
+            if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
+                updateData(title,content);
+                Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
+
+            }
+            else{
+                Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
+
+            }
+        }
+        else if(v==tvSave){
+            if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
+                updateData(title,content);
+                Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
+
+            }
+            else{
+                Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
+
             }
 
         }
@@ -113,6 +159,12 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         } else {
             Toast.makeText(StoryCreateActivity.this, "User is not Signed in", Toast.LENGTH_SHORT).show();
         }
+
+
+
+
+
+
     }
     private void deleteNote(){
         mDatabaseReference.child(noteId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -139,11 +191,15 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     }
     private void updateData(String title, String content){
         if(firebaseAuth.getCurrentUser()!=null){
-            String key = mDatabaseReference.child("nodes").push().getKey();
-            HashMap<String, Object> result = new HashMap<>();
-            result.put(TITLE, title);
-            result.put(CONTENT, content);
-            result.put("timeStamp", ServerValue.TIMESTAMP );
+
+           Stories stories=new Stories(title,content);
+
+                Map<String, Object> postValues = stories.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(noteId, postValues);
+
+                mDatabaseReference.updateChildren(childUpdates);
+
 
 
         }

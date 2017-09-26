@@ -61,10 +61,10 @@ public class MyStoriesFragment extends Fragment  {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<Users, NoteViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Users, NoteViewHolder>(
-                Users.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
+        FirebaseRecyclerAdapter<Stories, NoteViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Stories, NoteViewHolder>(
+                Stories.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
             @Override
-            protected void populateViewHolder(final NoteViewHolder viewHolder, Users model, int position) {
+            protected void populateViewHolder(final NoteViewHolder viewHolder, Stories model, int position) {
                 final String noteId=getRef(position).getKey();
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
