@@ -1,6 +1,5 @@
 package application.example.com.notecard;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,7 @@ public class VideoActivity extends AppCompatActivity {
 
     private StorageReference mStorageReference;
     private FirebaseAuth mFireBaseAuth;
-    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,8 +29,12 @@ public class VideoActivity extends AppCompatActivity {
 
         mStorageReference= FirebaseStorage.getInstance().getReference().child("videos")
                 .child(mFireBaseAuth.getCurrentUser().getUid());
-        progressDialog=new ProgressDialog(this);
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+    }
 }

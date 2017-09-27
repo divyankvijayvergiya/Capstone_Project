@@ -40,7 +40,7 @@ import java.util.Map;
  */
 
 public class StoryCreateActivity extends AppCompatActivity implements View.OnClickListener {
-   public static final int REQUEST_VIDEO_CAPTURE = 1;
+    public static final int REQUEST_VIDEO_CAPTURE = 1;
 
     private EditText etTitle;
     private EditText etNote;
@@ -57,6 +57,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     private StorageReference mStorageReference;
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,13 +218,13 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private void updateData(String title, String content){
         if(firebaseAuth.getCurrentUser()!=null){
 
-           Stories stories=new Stories(title,content);
+            Stories stories=new Stories(title,content);
 
-                Map<String, Object> postValues = stories.toMap();
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(noteId, postValues);
+            Map<String, Object> postValues = stories.toMap();
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put(noteId, postValues);
 
-                mDatabaseReference.updateChildren(childUpdates);
+            mDatabaseReference.updateChildren(childUpdates);
 
 
 
@@ -254,6 +255,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
+                    Toast.makeText(StoryCreateActivity.this,"Video Uploaded",Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -287,5 +289,6 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }
