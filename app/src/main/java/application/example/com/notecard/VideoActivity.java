@@ -33,4 +33,5 @@ public class VideoActivity extends AppCompatActivity {
         progressDialog=new ProgressDialog(this);
     }
 
+
 }
