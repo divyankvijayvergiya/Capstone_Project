@@ -131,11 +131,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_notes) {
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            MyStoriesFragment myStoriesFragment = new MyStoriesFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.frame_stories, myStoriesFragment)
-                    .commit();
+          Intent intent=new Intent(MainActivity.this,VideoActivity.class);
+            startActivity(intent);
 
 
         } else if (id == R.id.nav_feedback) {
