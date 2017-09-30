@@ -1,4 +1,4 @@
-package application.example.com.notecard;
+package application.example.com.notecard.Model;
 
 /**
  * Created by Dell on 20-09-2017.

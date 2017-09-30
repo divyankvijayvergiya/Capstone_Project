@@ -131,8 +131,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_notes) {
 
-          Intent intent=new Intent(MainActivity.this,VideoActivity.class);
-            startActivity(intent);
+
 
 
         } else if (id == R.id.nav_feedback) {

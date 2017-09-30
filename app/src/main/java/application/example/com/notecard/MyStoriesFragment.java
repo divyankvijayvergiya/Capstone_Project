@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import application.example.com.notecard.Model.Stories;
+
 /**
  * Created by Dell on 20-09-2017.
  */

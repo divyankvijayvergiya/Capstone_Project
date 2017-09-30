@@ -1,4 +1,4 @@
-package application.example.com.notecard;
+package application.example.com.notecard.Model;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;

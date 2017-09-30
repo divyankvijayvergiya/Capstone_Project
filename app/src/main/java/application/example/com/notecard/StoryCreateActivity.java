@@ -35,6 +35,8 @@ import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.Map;
 
+import application.example.com.notecard.Model.Stories;
+
 /**
  * Created by Dell on 23-09-2017.
  */
@@ -282,7 +284,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if(id==R.id.action_video){
-            dispatchTakeVideoIntent();
+            Intent intent= new Intent(StoryCreateActivity.this,VideoActivity.class);
+            startActivity(intent);
 
 
             return true;
