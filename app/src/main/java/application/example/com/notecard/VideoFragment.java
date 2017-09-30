@@ -282,7 +282,7 @@ public class VideoFragment extends Fragment
             camera_text.setText(getArguments().getString(CONTENT));
 
         }
-        
+
 
         mButtonVideo.setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);

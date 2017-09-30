@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'NoteKey0'
             keyPassword 'DivyankShivang10'
-            storeFile file('F:/Udacity projects/Capstone_Project/Note.jks')
+            storeFile file("$rootDir\\keystore\\Note.jks")
             storePassword 'DivyankShivang10'
         }
     }
