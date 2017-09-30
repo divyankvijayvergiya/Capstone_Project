@@ -30,7 +30,7 @@ public class VideoActivity  extends AppCompatActivity {
             videoFragment.setArguments(b);
 
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, VideoFragment.newInstance())
+                    .replace(R.id.container, videoFragment)
                     .commit();
         }
     }

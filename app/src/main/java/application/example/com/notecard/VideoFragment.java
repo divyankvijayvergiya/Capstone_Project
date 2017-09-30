@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
-    private static TextView camera_text;
+
     private static final String CONTENT="content";
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -97,6 +97,8 @@ public class VideoFragment extends Fragment
      * Button to record video
      */
     private Button mButtonVideo;
+
+    private  TextView tvCamera;
 
     /**
      * A refernce to the opened {@link android.hardware.camera2.CameraDevice}.
@@ -276,10 +278,10 @@ public class VideoFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (Button) view.findViewById(R.id.video);
-        camera_text=(TextView)view.findViewById(R.id.text_camera);
+        tvCamera=(TextView)view.findViewById(R.id.text_camera);
         if(getArguments()!=null) {
 
-            camera_text.setText(getArguments().getString(CONTENT,""));
+            tvCamera.setText(getArguments().getString(CONTENT,""));
 
         }
         else{
