@@ -1,10 +1,14 @@
 package application.example.com.notecard;
 
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +25,7 @@ import java.io.IOException;
  */
 
 public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA =1 ;
     private VideoView mVideoView;
     private Camera camera;
     boolean previewing = false;
@@ -55,9 +60,52 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        if (ContextCompat.checkSelfPermission(VideoActivity.this,
+                android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(VideoActivity.this,
+                    android.Manifest.permission.CAMERA)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(VideoActivity.this,
+                        new String[]{android.Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
         camera = Camera.open();
 
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_CAMERA:{
+                if(grantResults.length>0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+
+
+
+
+                }
+                else {
+
+                }
+                return;
+            }
+        }
     }
 
     @Override
