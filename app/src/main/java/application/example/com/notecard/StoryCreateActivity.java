@@ -3,10 +3,13 @@ package application.example.com.notecard;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,12 +28,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -279,6 +279,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -287,28 +288,22 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if(id==R.id.action_video){
-            mDatabaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if ( dataSnapshot.hasChild(CONTENT)) {
-                        final String content = dataSnapshot.child(CONTENT).getValue().toString();
-                        final String key=dataSnapshot.getKey();
-                        Intent intent= new Intent(StoryCreateActivity.this,VideoActivity.class);
-
-                        intent.putExtra(CONTENT,content);
-                        intent.putExtra("key",key);
-
-                        startActivity(intent);
+            Intent intent=getIntent();
+            String content=intent.getStringExtra(CONTENT);
+            noteId=getIntent().getStringExtra("key");
 
 
-                    }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            VideoFragment videoFragment=new VideoFragment();
+            Bundle b= new Bundle();
+            b.putString(CONTENT,content);
+            b.putString("key",noteId);
+            videoFragment.setArguments(b);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, VideoFragment.newInstance()).commit();
 
-                }
-            });
+
+
 
 
 
