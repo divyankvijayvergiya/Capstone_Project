@@ -60,7 +60,6 @@ public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
     private static TextView camera_text;
     private static final String CONTENT="content";
-    private static  String noteId;
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
     private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
@@ -278,9 +277,10 @@ public class VideoFragment extends Fragment
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (Button) view.findViewById(R.id.video);
         camera_text=(TextView)view.findViewById(R.id.text_camera);
-        if(getArguments()!=null){
-            camera_text.setText(getArguments().getString(CONTENT,""));
-        }
+
+
+            camera_text.setText(getArguments().getString(CONTENT));
+
 
 
         mButtonVideo.setOnClickListener(this);

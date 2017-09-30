@@ -3,13 +3,10 @@ package application.example.com.notecard;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -279,7 +276,6 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -288,19 +284,15 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if(id==R.id.action_video){
-            Intent intent=getIntent();
-            String content=intent.getStringExtra(CONTENT);
-            noteId=getIntent().getStringExtra("key");
+            Intent intent =getIntent();
+            String  content=intent.getStringExtra(CONTENT);
+            String noteId=getIntent().getStringExtra("key");
+            Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
+            newIntent.putExtra(CONTENT,content);
+            newIntent.putExtra("key",noteId);
+            startActivity(newIntent);
 
 
-
-            VideoFragment videoFragment=new VideoFragment();
-            Bundle b= new Bundle();
-            b.putString(CONTENT,content);
-            b.putString("key",noteId);
-            videoFragment.setArguments(b);
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, VideoFragment.newInstance()).commit();
 
 
 
