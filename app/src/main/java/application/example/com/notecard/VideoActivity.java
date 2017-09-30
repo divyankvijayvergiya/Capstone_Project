@@ -1,5 +1,6 @@
 package application.example.com.notecard;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
@@ -12,9 +13,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -27,13 +31,16 @@ import java.io.IOException;
 public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA =1 ;
     private VideoView mVideoView;
+    String noteId="key";
     private Camera camera;
     boolean previewing = false;
+    public final String CONTENT="content";
     private StorageReference mStorageReference;
     private FirebaseAuth mFireBaseAuth;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
-
+    private TextView text_camera;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +52,16 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
         surfaceView= (SurfaceView) findViewById(R.id.surface_view);
         surfaceHolder=surfaceView.getHolder();
         surfaceHolder.addCallback(this);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
+                .child(mFireBaseAuth.getCurrentUser().getUid());
+        text_camera= (TextView) findViewById(R.id.text_camera);
+        Intent intent=getIntent();
+        if(intent!=null) {
+            text_camera.setText(intent.getStringExtra(CONTENT));
+            noteId = getIntent().getStringExtra("key");
+        }
+
+
 
 
         mStorageReference= FirebaseStorage.getInstance().getReference().child("videos")

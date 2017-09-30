@@ -284,8 +284,17 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if(id==R.id.action_video){
+
             Intent intent= new Intent(StoryCreateActivity.this,VideoActivity.class);
+            intent.putExtra(CONTENT, noteId);
+            intent.putExtra("key",noteId);
+
+
+
             startActivity(intent);
+
+
+
 
 
             return true;
