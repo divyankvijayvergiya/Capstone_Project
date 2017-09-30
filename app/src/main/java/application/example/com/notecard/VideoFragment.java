@@ -43,6 +43,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static final String CONTENT="content";
+    private static final String CONTENT = "content";
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
     private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
@@ -92,13 +93,19 @@ public class VideoFragment extends Fragment
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
+    public static String ROTATE = null;
+
+
+    private ImageView ivRotateFront, ivRotateBack;
+
 
     /**
      * Button to record video
      */
     private Button mButtonVideo;
 
-    private  TextView tvCamera;
+    private TextView tvCamera;
+    private String cameraId;
 
     /**
      * A refernce to the opened {@link android.hardware.camera2.CameraDevice}.
@@ -278,18 +285,23 @@ public class VideoFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (Button) view.findViewById(R.id.video);
-        tvCamera=(TextView)view.findViewById(R.id.text_camera);
-        if(getArguments()!=null) {
+        tvCamera = (TextView) view.findViewById(R.id.text_camera);
+        ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
+        ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
 
-            tvCamera.setText(getArguments().getString(CONTENT,""));
+        if (getArguments() != null) {
 
-        }
-        else{
-            Toast.makeText(getActivity(),"No Content",Toast.LENGTH_SHORT).show();
+            tvCamera.setText(getArguments().getString(CONTENT, ""));
+
+        } else {
+            Toast.makeText(getActivity(), "No Content", Toast.LENGTH_SHORT).show();
         }
 
 
         mButtonVideo.setOnClickListener(this);
+        ivRotateFront.setOnClickListener(this);
+        ivRotateBack.setOnClickListener(this);
+
         view.findViewById(R.id.info).setOnClickListener(this);
     }
 
@@ -314,10 +326,61 @@ public class VideoFragment extends Fragment
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_rotate_front: {
+
+
+                ivRotateFront.setVisibility(View.GONE);
+                ivRotateBack.setVisibility(View.VISIBLE);
+
+                closeCamera();
+                stopBackgroundThread();
+
+                startBackgroundThread();
+                if (mTextureView.isAvailable()) {
+
+                    ROTATE = "fulfilled";
+
+                    Log.e("Rotate", "" + ROTATE);
+
+                    openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+
+
+                } else {
+                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+                }
+
+
+                break;
+            }
+            case R.id.iv_rotate_back: {
+
+                Log.e("ClickBack", "Test");
+
+                ivRotateFront.setVisibility(View.VISIBLE);
+                ivRotateBack.setVisibility(View.GONE);
+
+                closeCamera();
+                stopBackgroundThread();
+
+                startBackgroundThread();
+                if (mTextureView.isAvailable()) {
+                    openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+                } else {
+                    mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+                }
+
+
+                break;
+            }
+
             case R.id.video: {
                 if (mIsRecordingVideo) {
+                    ivRotateBack.setClickable(true);
+                    ivRotateFront.setClickable(true);
                     stopRecordingVideo();
                 } else {
+                    ivRotateBack.setClickable(false);
+                    ivRotateFront.setClickable(false);
                     startRecordingVideo();
                 }
                 break;
@@ -434,16 +497,26 @@ public class VideoFragment extends Fragment
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            String cameraId = manager.getCameraIdList()[0];
+
+            if(ROTATE != null){
+
+                Log.e("FrontCamera", "Test");
+
+                cameraId = manager.getCameraIdList()[1];
+
+                ROTATE = null;
+
+            } else {
+
+                Log.e("BackCamera", "Test");
+
+                cameraId = manager.getCameraIdList()[0];
+
+            }
 
 
             // Choose the sizes for camera preview and video recording
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
-            Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-            if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
-
-
-            }
 
             StreamConfigurationMap map = characteristics
                     .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
@@ -471,6 +544,8 @@ public class VideoFragment extends Fragment
                 return;
             }
             manager.openCamera(cameraId, mStateCallback, null);
+
+
         } catch (CameraAccessException e) {
             Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
             activity.finish();
