@@ -25,9 +25,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -284,14 +287,28 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if(id==R.id.action_video){
+            mDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if ( dataSnapshot.hasChild(CONTENT)) {
+                        final String content = dataSnapshot.child(CONTENT).getValue().toString();
+                        final String key=dataSnapshot.getKey();
+                        Intent intent= new Intent(StoryCreateActivity.this,VideoActivity.class);
 
-            Intent intent= new Intent(StoryCreateActivity.this,VideoActivity.class);
-            intent.putExtra(CONTENT, noteId);
-            intent.putExtra("key",noteId);
+                        intent.putExtra(CONTENT,content);
+                        intent.putExtra("key",key);
+
+                        startActivity(intent);
 
 
+                    }
+                }
 
-            startActivity(intent);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
 
 
