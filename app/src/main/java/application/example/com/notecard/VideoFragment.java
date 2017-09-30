@@ -277,11 +277,12 @@ public class VideoFragment extends Fragment
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (Button) view.findViewById(R.id.video);
         camera_text=(TextView)view.findViewById(R.id.text_camera);
-
+        if(getArguments()!=null) {
 
             camera_text.setText(getArguments().getString(CONTENT));
 
-
+        }
+        
 
         mButtonVideo.setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
