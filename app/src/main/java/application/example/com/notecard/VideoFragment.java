@@ -282,6 +282,9 @@ public class VideoFragment extends Fragment
             camera_text.setText(getArguments().getString(CONTENT,""));
 
         }
+        else{
+            Toast.makeText(getActivity(),"No Content",Toast.LENGTH_SHORT).show();
+        }
 
 
         mButtonVideo.setOnClickListener(this);
