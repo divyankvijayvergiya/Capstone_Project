@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"></uses-permission>
+
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
@@ -31,6 +34,7 @@
         </activity>
         <activity android:name=".StoryCreateActivity"></activity>
         <activity android:name=".VideoActivity"></activity>
+        <activity android:name=".SettingsActivity"></activity>
 
     </application>
 

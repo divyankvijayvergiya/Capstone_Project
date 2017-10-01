@@ -10,8 +10,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
@@ -25,15 +28,18 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.Size;
@@ -97,6 +103,9 @@ public class VideoFragment extends Fragment
 
 
     private ImageView ivRotateFront, ivRotateBack;
+    private AudioManager audioManager;
+    private NotificationManager notificationManager;
+    private Context mContext;
 
 
 
@@ -289,6 +298,23 @@ public class VideoFragment extends Fragment
         tvCamera = (VerticalMarqueeTextView) view.findViewById(R.id.text_camera);
         ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
         ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean silentMode = sharedPreferences.getBoolean(getString(R.string.silent_mode), true);
+        audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && !notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            getActivity().startActivity(intent);
+        }
+        if(silentMode){
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        }else{
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        }
 
 
         // Set the VMTV movement method so that it can scroll.
