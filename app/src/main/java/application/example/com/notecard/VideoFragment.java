@@ -42,7 +42,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,7 +102,7 @@ public class VideoFragment extends Fragment
     /**
      * Button to record video
      */
-    private Button mButtonVideo;
+    private ImageButton mButtonVideo;
 
     private TextView tvCamera;
     private String cameraId;
@@ -284,7 +284,7 @@ public class VideoFragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        mButtonVideo = (Button) view.findViewById(R.id.video);
+        mButtonVideo = (ImageButton) view.findViewById(R.id.video);
         tvCamera = (TextView) view.findViewById(R.id.text_camera);
         ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
         ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
@@ -737,7 +737,7 @@ public class VideoFragment extends Fragment
                         @Override
                         public void run() {
                             // UI
-                            mButtonVideo.setText(R.string.stop);
+                            mButtonVideo.setImageResource(R.drawable.ic_pause_circle_filled_black_24px);
                             mIsRecordingVideo = true;
 
                             // Start recording
@@ -772,7 +772,7 @@ public class VideoFragment extends Fragment
     private void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
-        mButtonVideo.setText(R.string.record);
+        mButtonVideo.setImageResource(R.drawable.ic_play_circle_filled_black_24px);
         // Stop recording
         mMediaRecorder.stop();
         mMediaRecorder.reset();
