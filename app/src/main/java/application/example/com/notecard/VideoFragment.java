@@ -310,10 +310,12 @@ public class VideoFragment extends Fragment
             Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
             getActivity().startActivity(intent);
         }
-        if(silentMode){
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-        }else{
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        else {
+            if (silentMode) {
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            } else {
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
         }
 
 
