@@ -34,6 +34,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -44,7 +45,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -99,12 +99,13 @@ public class VideoFragment extends Fragment
     private ImageView ivRotateFront, ivRotateBack;
 
 
+
     /**
      * Button to record video
      */
     private ImageButton mButtonVideo;
 
-    private TextView tvCamera;
+    private VerticalMarqueeTextView tvCamera;
     private String cameraId;
 
     /**
@@ -285,9 +286,14 @@ public class VideoFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (ImageButton) view.findViewById(R.id.video);
-        tvCamera = (TextView) view.findViewById(R.id.text_camera);
+        tvCamera = (VerticalMarqueeTextView) view.findViewById(R.id.text_camera);
         ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
         ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
+
+
+        // Set the VMTV movement method so that it can scroll.
+        tvCamera.setMovementMethod(new ScrollingMovementMethod());
+        tvCamera.pauseMarquee();
 
         if (getArguments() != null) {
 
@@ -314,12 +320,15 @@ public class VideoFragment extends Fragment
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
+
+
     }
 
     @Override
     public void onPause() {
         closeCamera();
         stopBackgroundThread();
+
         super.onPause();
     }
 
@@ -378,10 +387,12 @@ public class VideoFragment extends Fragment
                     ivRotateBack.setClickable(true);
                     ivRotateFront.setClickable(true);
                     stopRecordingVideo();
+                    tvCamera.pauseMarquee();
                 } else {
                     ivRotateBack.setClickable(false);
                     ivRotateFront.setClickable(false);
                     startRecordingVideo();
+                    tvCamera.resumeMarquee();
                 }
                 break;
             }
@@ -405,6 +416,7 @@ public class VideoFragment extends Fragment
         mBackgroundThread = new HandlerThread("CameraBackground");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+
     }
 
     /**
@@ -419,6 +431,7 @@ public class VideoFragment extends Fragment
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -855,4 +868,9 @@ public class VideoFragment extends Fragment
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        tvCamera.stopMarquee();
+    }
 }
