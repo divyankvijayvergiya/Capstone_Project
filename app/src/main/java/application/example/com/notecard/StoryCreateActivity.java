@@ -301,7 +301,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if(id==R.id.action_video){
             Intent intent =getIntent();
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
-            String cont=newIntent.getStringExtra(CONTENT);
+            String cont=intent.getStringExtra(CONTENT);
 
 
             newIntent.putExtra(CONTENT,cont);
