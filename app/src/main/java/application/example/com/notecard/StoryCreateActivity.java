@@ -114,7 +114,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 createNote(title, content);
-                
+
 
 
 
@@ -170,7 +170,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
 
-
+                                noteId="key";
                             } else {
                                 Toast.makeText(StoryCreateActivity.this, "ERROR: ", Toast.LENGTH_SHORT).show();
 
