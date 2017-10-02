@@ -114,7 +114,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 createNote(title, content);
-                Toast.makeText(StoryCreateActivity.this,"Note added",Toast.LENGTH_SHORT).show();
+                
 
 
 
