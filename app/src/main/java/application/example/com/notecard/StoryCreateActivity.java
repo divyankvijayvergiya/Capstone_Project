@@ -115,7 +115,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 createNote(title, content);
-                noteId=mDatabaseReference.getKey();
+
 
 
 
@@ -146,7 +146,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
                 updateData(title,content);
                 Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
-                note=mDatabaseReference.getKey();
+
 
             }
             else{
@@ -161,7 +161,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private void createNote(String title, String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
-            note=mDatabaseReference.getKey();
+
+            noteId=newDatabaseReference.getKey();
+            Log.d("Note key",noteId);
 
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
@@ -296,7 +298,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             String  content=intent.getStringExtra(CONTENT);
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
             newIntent.putExtra(CONTENT,content);
-            newIntent.putExtra("key",note);
+            newIntent.putExtra("key",noteId);
             startActivity(newIntent);
 
 
