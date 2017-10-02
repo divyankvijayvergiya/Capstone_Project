@@ -242,6 +242,11 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             childUpdates.put(noteId, postValues);
 
             mDatabaseReference.updateChildren(childUpdates);
+            noteId=mDatabaseReference.push().getKey();
+            Log.d("Note key",noteId);
+
+            con=content;
+            Log.d("content",con);
 
 
 
@@ -300,10 +305,14 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         }
         if(id==R.id.action_video){
             Intent intent =getIntent();
-            Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
+
             String cont=intent.getStringExtra(CONTENT);
+            String not=intent.getStringExtra("key");
 
 
+            Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
+
+            newIntent.putExtra("k",not);
             newIntent.putExtra(CONTENT,cont);
             newIntent.putExtra("con",con);
             newIntent.putExtra("key",noteId);
