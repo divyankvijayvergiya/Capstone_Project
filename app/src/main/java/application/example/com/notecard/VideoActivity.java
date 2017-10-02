@@ -22,8 +22,10 @@ public class VideoActivity  extends AppCompatActivity {
         if (null == savedInstanceState) {
             Intent intent=getIntent();
             String content=intent.getStringExtra(CONTENT);
+            String con=intent.getStringExtra("con");
             String noteId=intent.getStringExtra("key");
             Bundle b=new Bundle();
+            b.putString("con",con);
             b.putString(CONTENT,content);
             b.putString("key",noteId);
             VideoFragment videoFragment=new VideoFragment();

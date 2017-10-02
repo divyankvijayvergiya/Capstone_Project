@@ -159,14 +159,12 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void createNote(String title, String content) {
+    private void createNote(String title, final String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
 
             noteId=newDatabaseReference.getKey();
             Log.d("Note key",noteId);
-            con=newDatabaseReference.child(CONTENT).getKey();
-            Log.d("content",con);
 
 
 
@@ -183,6 +181,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
 
+                                con=content;
+                                Log.d("content",con);
 
 
                             } else {
@@ -301,9 +301,11 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if(id==R.id.action_video){
             Intent intent =getIntent();
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
-             
+            String cont=newIntent.getStringExtra(CONTENT);
 
-            newIntent.putExtra(CONTENT,con);
+
+            newIntent.putExtra(CONTENT,cont);
+            newIntent.putExtra("con",con);
             newIntent.putExtra("key",noteId);
             startActivity(newIntent);
 
