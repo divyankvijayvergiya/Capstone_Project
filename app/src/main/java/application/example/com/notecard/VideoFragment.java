@@ -64,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String CONTENT = "content";
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
@@ -299,6 +299,7 @@ public class VideoFragment extends Fragment
         ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
         ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         boolean silentMode = sharedPreferences.getBoolean(getString(R.string.silent_mode), true);
         audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
          notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -317,6 +318,7 @@ public class VideoFragment extends Fragment
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
         }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
 
         // Set the VMTV movement method so that it can scroll.
@@ -828,6 +830,29 @@ public class VideoFragment extends Fragment
         startPreview();
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.silent_mode))) {
+            boolean silentMode = sharedPreferences.getBoolean(key, true);
+            audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+            notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && !notificationManager.isNotificationPolicyAccessGranted()) {
+                Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                getActivity().startActivity(intent);
+            } else {
+                if (silentMode) {
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                } else {
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+            }
+        }
+
+    }
+
     /**
      * Compares two {@code Size}s based on their areas.
      */
@@ -900,5 +925,6 @@ public class VideoFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         tvCamera.stopMarquee();
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 }
