@@ -56,6 +56,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private String noteId;
     private ImageButton btEdit;
     private TextView tvSave;
+    private String note;
 
     private StorageReference mStorageReference;
     private ProgressDialog progressDialog;
@@ -114,6 +115,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 createNote(title, content);
+                noteId=mDatabaseReference.getKey();
 
 
 
@@ -144,6 +146,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
                 updateData(title,content);
                 Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
+                note=mDatabaseReference.getKey();
 
             }
             else{
@@ -158,6 +161,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private void createNote(String title, String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
+            note=mDatabaseReference.getKey();
+
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
             noteMap.put(CONTENT, content);
@@ -171,7 +176,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
 
-                                noteId=getIntent().getStringExtra("key");
+
+
                             } else {
                                 Toast.makeText(StoryCreateActivity.this, "ERROR: ", Toast.LENGTH_SHORT).show();
 
@@ -288,10 +294,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if(id==R.id.action_video){
             Intent intent =getIntent();
             String  content=intent.getStringExtra(CONTENT);
-            String noteId=getIntent().getStringExtra("key");
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
             newIntent.putExtra(CONTENT,content);
-            newIntent.putExtra("key",noteId);
+            newIntent.putExtra("key",note);
             startActivity(newIntent);
 
 
