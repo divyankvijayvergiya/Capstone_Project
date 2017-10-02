@@ -118,6 +118,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
 
 
+
             }
             else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
@@ -170,7 +171,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
 
-                                noteId="key";
+                                noteId=getIntent().getStringExtra("key");
                             } else {
                                 Toast.makeText(StoryCreateActivity.this, "ERROR: ", Toast.LENGTH_SHORT).show();
 
