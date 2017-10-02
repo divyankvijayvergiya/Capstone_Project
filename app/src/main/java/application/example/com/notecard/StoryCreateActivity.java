@@ -312,9 +312,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
 
-            newIntent.putExtra("k",not);
+
             newIntent.putExtra(CONTENT,cont);
-            newIntent.putExtra("con",con);
+            newIntent.putExtra(CONTENT,con);
             newIntent.putExtra("key",noteId);
             startActivity(newIntent);
 

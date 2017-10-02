@@ -328,7 +328,7 @@ public class VideoFragment extends Fragment
         if (getArguments() != null) {
 
             tvCamera.setText(getArguments().getString(CONTENT, ""));
-            tvCamera.setText(getArguments().getString("con",""));
+
 
         } else {
             Toast.makeText(getActivity(), "No Content", Toast.LENGTH_SHORT).show();
