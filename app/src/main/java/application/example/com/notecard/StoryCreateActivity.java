@@ -56,7 +56,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private String noteId;
     private ImageButton btEdit;
     private TextView tvSave;
-    private String note;
+    private String con;
+
 
     private StorageReference mStorageReference;
     private ProgressDialog progressDialog;
@@ -164,6 +165,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             noteId=newDatabaseReference.getKey();
             Log.d("Note key",noteId);
+            con=newDatabaseReference.child(CONTENT).getKey();
+            Log.d("content",con);
+
+
 
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
@@ -295,9 +300,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         }
         if(id==R.id.action_video){
             Intent intent =getIntent();
-            String  content=intent.getStringExtra(CONTENT);
             Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
-            newIntent.putExtra(CONTENT,content);
+             
+
+            newIntent.putExtra(CONTENT,con);
             newIntent.putExtra("key",noteId);
             startActivity(newIntent);
 
