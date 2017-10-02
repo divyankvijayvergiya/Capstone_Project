@@ -22,12 +22,11 @@ public class VideoActivity  extends AppCompatActivity {
         if (null == savedInstanceState) {
             Intent intent=getIntent();
             String content=intent.getStringExtra(CONTENT);
-
+            String not=intent.getStringExtra("k");
             String noteId=intent.getStringExtra("key");
-
+            String con=intent.getStringExtra("con");
             Bundle b=new Bundle();
-
-
+            b.putString(CONTENT,con);
             b.putString(CONTENT,content);
             b.putString("key",noteId);
             VideoFragment videoFragment=new VideoFragment();

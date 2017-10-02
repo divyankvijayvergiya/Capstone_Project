@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -50,13 +49,13 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private ImageButton btDelete;
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth;
-    public int index=0;
-    public final String TITLE="title" ;
-    public final String CONTENT="content";
+    public int index = 0;
+    public final String TITLE = "title";
+    public final String CONTENT = "content";
     private String noteId;
     private ImageButton btEdit;
     private TextView tvSave;
-    private String con;
+    private String myContent;
 
 
     private StorageReference mStorageReference;
@@ -66,17 +65,17 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_story_create);
-        Toolbar toolbar= (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        etNote = (EditText)findViewById(R.id.script);
-        etTitle = (EditText)findViewById(R.id.title_name);
-        btDone = (ImageButton)findViewById(R.id.button_done);
-        btDelete = (ImageButton)findViewById(R.id.button_delete);
-        btEdit= (ImageButton) findViewById(R.id.button_update);
-        tvSave= (TextView) findViewById(R.id.text_save);
+        etNote = (EditText) findViewById(R.id.script);
+        etTitle = (EditText) findViewById(R.id.title_name);
+        btDone = (ImageButton) findViewById(R.id.button_done);
+        btDelete = (ImageButton) findViewById(R.id.button_delete);
+        btEdit = (ImageButton) findViewById(R.id.button_update);
+        tvSave = (TextView) findViewById(R.id.text_save);
         btEdit.setOnClickListener(this);
         tvSave.setOnClickListener(this);
         btDone.setOnClickListener(this);
@@ -84,24 +83,25 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
                 .child(firebaseAuth.getCurrentUser().getUid());
-        mStorageReference= FirebaseStorage.getInstance().getReference().child("videos")
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("videos")
                 .child(firebaseAuth.getCurrentUser().getUid());
-        progressDialog=new ProgressDialog(this);
-        Intent intent=getIntent();
-        if(intent!=null){
+        progressDialog = new ProgressDialog(this);
+        Intent intent = getIntent();
+        if (intent.hasExtra(CONTENT)) {
+            myContent = intent.getStringExtra(CONTENT);
+        }
+
+        if (intent != null) {
             etTitle.setText(intent.getStringExtra(TITLE));
             etNote.setText(intent.getStringExtra(CONTENT));
-            noteId=getIntent().getStringExtra("key");
-            if (noteId!=null){
+            noteId = getIntent().getStringExtra("key");
+
+            if (noteId != null) {
                 btDone.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 btEdit.setVisibility(View.GONE);
                 tvSave.setVisibility(View.GONE);
             }
-
-
-
 
 
         }
@@ -118,39 +118,30 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                 createNote(title, content);
 
 
-
-
-
-
-            }
-            else {
+            } else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
-            if(!noteId.equals("key")){
+            if (!noteId.equals("key")) {
                 deleteNote();
             }
 
-        }
-        else if(v==btEdit){
-            if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
-                updateData(title,content);
+        } else if (v == btEdit) {
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+                updateData(title, content);
                 Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
 
-            }
-            else{
+            } else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
 
             }
-        }
-        else if(v==tvSave){
-            if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)){
-                updateData(title,content);
+        } else if (v == tvSave) {
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+                updateData(title, content);
                 Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
 
 
-            }
-            else{
+            } else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
 
             }
@@ -163,9 +154,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
 
-            noteId=newDatabaseReference.getKey();
-            Log.d("Note key",noteId);
-
+            noteId = newDatabaseReference.getKey();
+            Log.d("Note key", noteId);
 
 
             final Map noteMap = new HashMap();
@@ -181,8 +171,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
 
-                                con=content;
-                                Log.d("content",con);
+                                myContent = content;
+                                Log.d("content", myContent);
 
 
                             } else {
@@ -204,27 +194,21 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         }
 
 
-
-
-
-
     }
-    private void deleteNote(){
+
+    private void deleteNote() {
         mDatabaseReference.child(noteId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(StoryCreateActivity.this,"Notes Deleted",Toast.LENGTH_SHORT).show();
-                    noteId="key";
+                if (task.isSuccessful()) {
+                    Toast.makeText(StoryCreateActivity.this, "Notes Deleted", Toast.LENGTH_SHORT).show();
+                    noteId = "key";
                     finish();
 
 
-
-
-                }
-                else {
-                    Log.e("StoryCreateFragment",task.getException().toString());
-                    Toast.makeText(StoryCreateActivity.this,"ERROR: "+task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("StoryCreateFragment", task.getException().toString());
+                    Toast.makeText(StoryCreateActivity.this, "ERROR: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -232,40 +216,36 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
-    private void updateData(String title, String content){
-        if(firebaseAuth.getCurrentUser()!=null){
 
-            Stories stories=new Stories(title,content);
+    private void updateData(String title, String content) {
+        if (firebaseAuth.getCurrentUser() != null) {
+
+            Stories stories = new Stories(title, content);
 
             Map<String, Object> postValues = stories.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put(noteId, postValues);
 
             mDatabaseReference.updateChildren(childUpdates);
-            noteId=mDatabaseReference.push().getKey();
-            Log.d("Note key",noteId);
+            noteId = mDatabaseReference.push().getKey();
+            Log.d("Note key", noteId);
 
-            con=content;
-            Log.d("content",con);
-
+            myContent = content;
+            Log.d("content", myContent);
 
 
         }
     }
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
 
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-        }
-    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             progressDialog.setMessage("Uploading Video...");
             progressDialog.show();
             Uri videoUri = intent.getData();
-            StorageReference videoRef=mStorageReference.child(videoUri.getLastPathSegment());
+            StorageReference videoRef = mStorageReference.child(videoUri.getLastPathSegment());
             UploadTask uploadTask = videoRef.putFile(videoUri);
 
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -277,7 +257,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
-                    Toast.makeText(StoryCreateActivity.this,"Video Uploaded",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StoryCreateActivity.this, "Video Uploaded", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -290,8 +270,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.story_create_menu,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.story_create_menu, menu);
         return true;
 
     }
@@ -303,31 +283,17 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }
-        if(id==R.id.action_video){
-            Intent intent =getIntent();
+        if (id == R.id.action_video) {
+            Intent intent = getIntent();
 
-            String cont=intent.getStringExtra(CONTENT);
-            String not=intent.getStringExtra("key");
+          
 
-
-            Intent newIntent=new Intent(StoryCreateActivity.this,VideoActivity.class);
+            Intent newIntent = new Intent(StoryCreateActivity.this, VideoActivity.class);
 
 
-
-            newIntent.putExtra(CONTENT,cont);
-            Log.d("c",cont);
-            newIntent.putExtra(CONTENT,con);
-            newIntent.putExtra("key",noteId);
+            newIntent.putExtra(CONTENT, myContent);
+            newIntent.putExtra("key", noteId);
             startActivity(newIntent);
-
-
-
-
-
-
-
-
-
 
 
             return true;
