@@ -303,6 +303,7 @@ public class VideoFragment extends Fragment
         boolean silentMode = sharedPreferences.getBoolean(getString(R.string.silent_mode), true);
         audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
          notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        tvCamera.getDuration();
 
 
 
@@ -318,6 +319,7 @@ public class VideoFragment extends Fragment
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
         }
+        loadSpeedFromSharedPreferences(sharedPreferences);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
 
@@ -340,6 +342,11 @@ public class VideoFragment extends Fragment
         ivRotateBack.setOnClickListener(this);
 
         view.findViewById(R.id.info).setOnClickListener(this);
+    }
+    private void loadSpeedFromSharedPreferences(SharedPreferences sharedPreferences){
+        int minSize=Integer.parseInt(sharedPreferences.getString(getString(R.string.speed)
+                ,getString(R.string.speed_default)));
+        tvCamera.setPixelYOffSet(minSize);
     }
 
     @Override
@@ -851,6 +858,9 @@ public class VideoFragment extends Fragment
                 }
             }
         }
+        else if(key.equals(getString(R.string.speed))){
+            loadSpeedFromSharedPreferences(sharedPreferences);
+        }
 
     }
 
@@ -928,4 +938,5 @@ public class VideoFragment extends Fragment
         tvCamera.stopMarquee();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
+
 }

@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 /**
  * Created by Dell on 27-09-2017.
@@ -18,6 +20,10 @@ public class VideoActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+        Toolbar toolbar= (Toolbar) findViewById(R.id.video_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         if (null == savedInstanceState) {
             Intent intent=getIntent();
@@ -36,6 +42,14 @@ public class VideoActivity  extends AppCompatActivity {
                     .replace(R.id.container, videoFragment)
                     .commit();
         }
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        return true;
+
     }
 
 }

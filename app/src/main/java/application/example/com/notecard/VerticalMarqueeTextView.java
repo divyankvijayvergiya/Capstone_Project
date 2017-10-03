@@ -71,7 +71,7 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
      * Initialize fields and start the marquee.
      */
     private void init() {
-        setDuration(65l);
+        setDuration(40l);
         setPixelYOffSet(1);
 
         isUserScrolling = isPaused = stop = false;
@@ -96,7 +96,7 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
      */
     public void setDuration(long duration) {
         if (duration <= 0) {
-            this.duration = 65l;
+            this.duration = 40l;
         } else {
             this.duration = duration;
         }
@@ -270,4 +270,3 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
     }
 
 }
-
