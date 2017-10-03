@@ -15,12 +15,17 @@ public class Stories {
     private String title;
     private String content;
 
+
+
+    private Long timeStamp;
+
     public Stories(){
 
     }
     public Stories(String title,String content){
         this.title=title;
         this.content=content;
+
 
     }
     public String getTitle() {
@@ -37,6 +42,13 @@ public class Stories {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
 

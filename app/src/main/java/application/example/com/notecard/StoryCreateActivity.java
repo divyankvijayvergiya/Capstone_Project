@@ -238,7 +238,6 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
@@ -287,7 +286,6 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             Intent intent = getIntent();
 
           
-
             Intent newIntent = new Intent(StoryCreateActivity.this, VideoActivity.class);
 
 
