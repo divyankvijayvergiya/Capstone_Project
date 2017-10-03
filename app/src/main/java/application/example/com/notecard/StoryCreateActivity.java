@@ -64,7 +64,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_story_create);
+        setContentView(R.layout.activity_story_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -285,7 +285,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if (id == R.id.action_video) {
             Intent intent = getIntent();
 
-          
+
             Intent newIntent = new Intent(StoryCreateActivity.this, VideoActivity.class);
 
 

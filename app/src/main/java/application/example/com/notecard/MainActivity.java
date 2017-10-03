@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         mName = (TextView) view.findViewById(R.id.user_name);
         mEmail = (TextView) view.findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
-
 
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -132,8 +132,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_notes) {
 
 
-
-
         } else if (id == R.id.nav_feedback) {
 
 
@@ -141,7 +139,7 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_manage) {
-            Intent settingsIntent=new Intent(MainActivity.this,SettingsActivity.class);
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
 
 
@@ -167,5 +165,20 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Signed in!", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Sign in Cancelled", Toast.LENGTH_LONG).show();
+                finish();
+
+            }
+
+        }
     }
 }

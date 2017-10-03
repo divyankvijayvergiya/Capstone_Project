@@ -1,6 +1,9 @@
 package application.example.com.notecard;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +37,7 @@ public class MyStoriesFragment extends Fragment  {
     public final String TITLE="title" ;
     public final String CONTENT="content";
     public final String TIMESTAMP="timeStamp";
+    private ProgressBar dialog;
 
     public MyStoriesFragment(){
 
@@ -41,6 +47,9 @@ public class MyStoriesFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.story_fragment, container, false);
+         dialog=new ProgressBar(getActivity());
+        dialog.setVisibility(View.VISIBLE);
+
         mRecyclerView= (RecyclerView) rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -63,6 +72,7 @@ public class MyStoriesFragment extends Fragment  {
     @Override
     public void onStart() {
         super.onStart();
+
         FirebaseRecyclerAdapter<Stories, NoteViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Stories, NoteViewHolder>(
                 Stories.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
             @Override
@@ -71,24 +81,33 @@ public class MyStoriesFragment extends Fragment  {
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild(TITLE) && dataSnapshot.hasChild(TIMESTAMP) && dataSnapshot.hasChild(CONTENT)) {
-                            final String title = dataSnapshot.child(TITLE).getValue().toString();
-                            final String time = dataSnapshot.child(TIMESTAMP).getValue().toString();
-                            final String content = dataSnapshot.child(CONTENT).getValue().toString();
-                            final String key=dataSnapshot.getKey();
-                            viewHolder.setNodeTitle(title);
-                            viewHolder.setTime(time);
-                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent=new Intent(getActivity(),StoryCreateActivity.class);
-                                    intent.putExtra(TITLE,title);
-                                    intent.putExtra(CONTENT,content);
-                                    intent.putExtra("key",key);
-                                    startActivity(intent);
+                        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
 
-                                }
-                            });
+                            if (dataSnapshot.hasChild(TITLE) && dataSnapshot.hasChild(TIMESTAMP) && dataSnapshot.hasChild(CONTENT)) {
+                                final String title = dataSnapshot.child(TITLE).getValue().toString();
+                                final String time = dataSnapshot.child(TIMESTAMP).getValue().toString();
+                                final String content = dataSnapshot.child(CONTENT).getValue().toString();
+                                final String key = dataSnapshot.getKey();
+                                viewHolder.setNodeTitle(title);
+                                viewHolder.setTime(time);
+
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), StoryCreateActivity.class);
+                                        intent.putExtra(TITLE, title);
+                                        intent.putExtra(CONTENT, content);
+                                        intent.putExtra("key", key);
+                                        startActivity(intent);
+
+                                    }
+                                });
+                            }
+                        }else{
+                            Toast.makeText(getActivity(), getString(R.string.internet), Toast.LENGTH_SHORT).show();
+
                         }
                     }
 
@@ -101,6 +120,7 @@ public class MyStoriesFragment extends Fragment  {
             }
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+        dialog.setVisibility(View.INVISIBLE);
     }
 
 
