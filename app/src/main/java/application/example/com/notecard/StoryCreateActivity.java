@@ -31,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,18 +152,22 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+
     private void createNote(String title, final String content) {
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
 
+            Map<String, String> timestamp=ServerValue.TIMESTAMP;
             noteId = newDatabaseReference.getKey();
             Log.d("Note key", noteId);
+            SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            sfd.format(new Date(String.valueOf(timestamp)));
 
 
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
             noteMap.put(CONTENT, content);
-            noteMap.put("timeStamp", ServerValue.TIMESTAMP);
+            noteMap.put("timeStamp",sfd );
             Thread mainThread = new Thread(new Runnable() {
                 @Override
                 public void run() {

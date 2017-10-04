@@ -23,4 +23,6 @@
 
         ]]>
     </string>
+    <string name="appwidget_text">Note Card</string>
+    <string name="add_widget">Add widget</string>
 </resources>

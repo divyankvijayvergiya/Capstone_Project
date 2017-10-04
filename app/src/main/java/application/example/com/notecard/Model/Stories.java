@@ -3,6 +3,8 @@ package application.example.com.notecard.Model;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,10 +56,13 @@ public class Stories {
 
     @Exclude
     public Map<String, Object> toMap() {
+        Map<String, String> timestamp=ServerValue.TIMESTAMP;
+        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        sfd.format(new Date(String.valueOf(timestamp)));
         HashMap<String, Object> result = new HashMap<>();
         result.put("title",title );
         result.put("content",content );
-        result.put("timeStamp", ServerValue.TIMESTAMP);
+        result.put("timeStamp", sfd);
 
 
         return result;
