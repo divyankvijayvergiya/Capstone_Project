@@ -31,8 +31,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,7 +129,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         } else if (v == btEdit) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 updateData(title, content);
-                Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
+                Toast.makeText(StoryCreateActivity.this, "Data Updated", Toast.LENGTH_SHORT).show();
 
             } else {
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
@@ -140,7 +138,8 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         } else if (v == tvSave) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 updateData(title, content);
-                Snackbar.make(v, "Data Updated", Snackbar.LENGTH_LONG).show();
+                Toast.makeText(StoryCreateActivity.this, "Data Updated", Toast.LENGTH_SHORT).show();
+
 
 
             } else {
@@ -157,17 +156,15 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if (firebaseAuth.getCurrentUser() != null) {
             final DatabaseReference newDatabaseReference = mDatabaseReference.push();
 
-            Map<String, String> timestamp=ServerValue.TIMESTAMP;
+
             noteId = newDatabaseReference.getKey();
             Log.d("Note key", noteId);
-            SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            sfd.format(new Date(String.valueOf(timestamp)));
 
 
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
             noteMap.put(CONTENT, content);
-            noteMap.put("timeStamp",sfd );
+            noteMap.put("timeStamp", ServerValue.TIMESTAMP);
             Thread mainThread = new Thread(new Runnable() {
                 @Override
                 public void run() {

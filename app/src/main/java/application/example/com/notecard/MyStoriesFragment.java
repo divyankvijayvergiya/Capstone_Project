@@ -35,6 +35,8 @@ public class MyStoriesFragment extends Fragment  {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     public final String TITLE="title" ;
+    public final String KEY="key" ;
+
     public final String CONTENT="content";
     public final String TIMESTAMP="timeStamp";
     private ProgressBar dialog;
@@ -99,7 +101,7 @@ public class MyStoriesFragment extends Fragment  {
                                         Intent intent = new Intent(getActivity(), StoryCreateActivity.class);
                                         intent.putExtra(TITLE, title);
                                         intent.putExtra(CONTENT, content);
-                                        intent.putExtra("key", key);
+                                        intent.putExtra(KEY, key);
                                         startActivity(intent);
 
                                     }
