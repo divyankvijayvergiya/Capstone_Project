@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import application.example.com.notecard.Model.Stories;
 
@@ -30,44 +31,41 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private FirebaseAuth firebaseAuth;
     private DatabaseReference firebaseDatabase;
     private ArrayList<Stories> storiesArrayList;
+    private CountDownLatch mCountDownLatch;
+
 
     public StoryRemoteViewsFactory(Context appliationContext, Intent intent){
         mContext=appliationContext;
+        storiesArrayList=new ArrayList<>();
     }
     @Override
     public void onCreate() {
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseDatabase= FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
-        final String noteId=firebaseDatabase.push().getKey();
-        firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    Stories stories = userSnapshot.getValue(Stories.class);
-
-                    storiesArrayList.add(stories);
-
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
 
     }
 
     @Override
     public void onDataSetChanged() {
+        mCountDownLatch = new CountDownLatch(1);
+        getItems();
+        try {
+            mCountDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void getItems(){
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseDatabase= FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
+
         final String noteId=firebaseDatabase.push().getKey();
-        firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        Log.d(TAG,noteId);
+        if(mCountDownLatch.getCount()==0) {
+
+            firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Stories stories = userSnapshot.getValue(Stories.class);
 
@@ -78,21 +76,55 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
 
 
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }else{
+            if(storiesArrayList!=null) {
+
+                firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            Stories stories = userSnapshot.getValue(Stories.class);
+
+                            storiesArrayList.add(stories);
+                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                                    new ComponentName(mContext, getClass()));
+                            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+
+
+                        }
+
 
                     }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+            mCountDownLatch.countDown();
 
 
 
-    }
+        }
+        }
+
+
+
+
 
     @Override
     public void onDestroy() {
