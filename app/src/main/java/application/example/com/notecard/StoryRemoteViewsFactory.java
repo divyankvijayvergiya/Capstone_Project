@@ -1,9 +1,13 @@
 package application.example.com.notecard;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,14 +44,17 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     Stories stories = userSnapshot.getValue(Stories.class);
+
                     storiesArrayList.add(stories);
-                    onDataSetChanged();
+
+
                 }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -63,16 +70,27 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
             public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Stories stories = userSnapshot.getValue(Stories.class);
+
                         storiesArrayList.add(stories);
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                                new ComponentName(mContext, getClass()));
+                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+
+
+
                     }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
 
             }
         });
+
+
 
     }
 
@@ -84,6 +102,8 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public int getCount() {
         if(storiesArrayList!=null) {
+            Log.d(TAG, String.valueOf(storiesArrayList.size()));
+
             return storiesArrayList.size();
         }else {
             return 0;
@@ -96,6 +116,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         Stories stories=storiesArrayList.get(position);
         remoteViews.setTextViewText(R.id.widget_title_note,stories.getTitle());
         remoteViews.setTextViewText(R.id.widget_time_note,stories.getContent());
+
 
 
 

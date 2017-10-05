@@ -31,6 +31,7 @@ public class NoteWidgetProvider extends AppWidgetProvider {
         views.setPendingIntentTemplate(R.id.widget_list_view,pendingIntent);
 
 
+
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
