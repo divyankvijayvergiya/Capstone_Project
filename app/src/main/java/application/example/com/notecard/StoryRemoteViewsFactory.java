@@ -70,11 +70,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                         Stories stories = userSnapshot.getValue(Stories.class);
 
                         storiesArrayList.add(stories);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                                new ComponentName(mContext, getClass()));
-                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
-
 
                     }
 
@@ -134,7 +129,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public int getCount() {
         if(storiesArrayList!=null) {
-            Log.d(TAG, String.valueOf(storiesArrayList.size()));
+            Log.d(TAG+"items", String.valueOf(storiesArrayList.size()));
 
             return storiesArrayList.size();
         }else {
