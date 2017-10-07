@@ -39,8 +39,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
-        array.add("sss");
-        array.add("ttt");
+
 
     }
 
