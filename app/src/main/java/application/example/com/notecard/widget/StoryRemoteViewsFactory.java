@@ -1,21 +1,14 @@
 package application.example.com.notecard.widget;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -65,6 +58,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         }
 
     }
+    /*
 
     private void getItems() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -127,6 +121,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
         }
     }
+    */
 
 
     @Override
