@@ -136,7 +136,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public int getCount() {
-        if (array != null) {
+        if (storiesArrayList != null) {
             Log.d(TAG + "items", String.valueOf(storiesArrayList.size()));
 
             return storiesArrayList.size();
