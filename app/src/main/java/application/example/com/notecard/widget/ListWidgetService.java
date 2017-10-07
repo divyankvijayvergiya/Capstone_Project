@@ -1,4 +1,4 @@
-package application.example.com.notecard;
+package application.example.com.notecard.widget;
 
 import android.content.Intent;
 import android.widget.RemoteViewsService;
