@@ -1,14 +1,21 @@
 package application.example.com.notecard.widget;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -46,18 +53,17 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public void onDataSetChanged() {
         mCountDownLatch = new CountDownLatch(1);
-        array.add("sss");
-        array.add("ttt");
-
-
+        getItems();
         try {
             mCountDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+
+
     }
-    /*
+
 
     private void getItems() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -120,7 +126,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
         }
     }
-    */
+
 
 
     @Override
@@ -131,9 +137,9 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public int getCount() {
         if (array != null) {
-            Log.d(TAG + "items", String.valueOf(array.size()));
+            Log.d(TAG + "items", String.valueOf(storiesArrayList.size()));
 
-            return array.size();
+            return storiesArrayList.size();
         } else {
             return 0;
         }
@@ -142,11 +148,11 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
-        String stories = array.get(position);
-        remoteViews.setTextViewText(R.id.widget_title_note, stories);
-        remoteViews.setTextViewText(R.id.widget_time_note, stories);
+        Stories stories = storiesArrayList.get(position);
+        remoteViews.setTextViewText(R.id.widget_title_note, stories.getTitle());
+        remoteViews.setTextViewText(R.id.widget_time_note, stories.getContent());
         Bundle extras = new Bundle();
-        extras.putString(mContext.getString(R.string.stories), stories);
+        extras.putParcelable(mContext.getString(R.string.stories), stories);
         Intent fillIntent = new Intent();
         fillIntent.putExtras(extras);
         remoteViews.setOnClickFillInIntent(R.id.widget_item_linear, fillIntent);
