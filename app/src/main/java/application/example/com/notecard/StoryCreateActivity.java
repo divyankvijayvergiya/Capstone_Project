@@ -122,13 +122,17 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                 Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
-           if( !TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
-               if (!noteId.equals("key")) {
-                   deleteNote();
-               }
-           }else{
-               Snackbar.make(v, "Not Possible to delete", Snackbar.LENGTH_LONG).show();
-           }
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+
+                if (!noteId.equals("key")) {
+                    deleteNote();
+                }
+            }else{
+                Toast.makeText(StoryCreateActivity.this, "Not Possible to delete", Toast.LENGTH_SHORT).show();
+
+
+            }
+
 
         } else if (v == btEdit) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {

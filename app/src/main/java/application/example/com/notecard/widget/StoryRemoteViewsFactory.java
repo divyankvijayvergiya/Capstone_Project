@@ -34,14 +34,17 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private DatabaseReference firebaseDatabase;
     private ArrayList<Stories> storiesArrayList;
     private CountDownLatch mCountDownLatch;
-    private ArrayList<String> array;
+    public final String TITLE="title" ;
+    public final String KEY="key" ;
+
+    public final String CONTENT="content";
+    public final String TIMESTAMP="timeStamp";
 
 
 
     public StoryRemoteViewsFactory(Context appliationContext, Intent intent) {
         mContext = appliationContext;
         storiesArrayList = new ArrayList<>();
-        array=new ArrayList<>();
     }
 
     @Override
@@ -52,13 +55,8 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onDataSetChanged() {
-        mCountDownLatch = new CountDownLatch(1);
         getItems();
-        try {
-            mCountDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
 
 
@@ -69,17 +67,24 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
 
-        final String noteId = firebaseDatabase.push().getKey();
-        Log.d(TAG, noteId);
-        if (mCountDownLatch.getCount() == 0) {
+        final String noteId = firebaseDatabase.push().getRef().getKey();
+        Log.d(TAG+" Key", noteId);
 
             firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Stories stories = userSnapshot.getValue(Stories.class);
+                        Log.d(TAG+" Stories", String.valueOf(stories));
+
 
                         storiesArrayList.add(stories);
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                                new ComponentName(mContext, getClass()));
+                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+
+
 
                     }
 
@@ -88,43 +93,11 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
 
                 }
             });
-        } else {
-            if (storiesArrayList != null) {
 
-                firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            Stories stories = userSnapshot.getValue(Stories.class);
-
-
-                            storiesArrayList.add(stories);
-                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                                    new ComponentName(mContext, getClass()));
-                            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
-
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-            mCountDownLatch.countDown();
-
-
-        }
     }
 
 
