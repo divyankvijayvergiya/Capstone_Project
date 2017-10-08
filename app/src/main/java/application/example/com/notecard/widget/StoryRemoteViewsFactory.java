@@ -67,14 +67,13 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
 
-        final String noteId = firebaseDatabase.push().getRef().getKey();
+        final String noteId = firebaseDatabase.getRef().getKey();
         Log.d(TAG+" Key", noteId);
 
             firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        Stories stories = userSnapshot.getValue(Stories.class);
+                        Stories stories = dataSnapshot.getValue(Stories.class);
                         Log.d(TAG+" Stories", String.valueOf(stories));
 
 
@@ -86,7 +85,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
 
 
-                    }
+
 
 
                 }
