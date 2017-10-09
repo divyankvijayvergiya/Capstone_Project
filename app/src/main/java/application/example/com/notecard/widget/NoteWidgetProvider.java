@@ -1,5 +1,6 @@
 package application.example.com.notecard.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import application.example.com.notecard.MainActivity;
 import application.example.com.notecard.R;
 
 /**
@@ -27,6 +29,12 @@ public class NoteWidgetProvider extends AppWidgetProvider {
         Intent intentList = new Intent(context, ListWidgetService.class);
         views.setRemoteAdapter(R.id.widget_list_view, intentList);
         views.setTextViewText(R.id.appwidget_text, widgetText);
+        Intent viewIntent=new Intent(context, MainActivity.class);
+        PendingIntent viewPendingIntent = PendingIntent.getActivity(context, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.appwidget_text,viewPendingIntent);
+
+        views.setPendingIntentTemplate(R.id.widget_list_view,viewPendingIntent);
+
 
 
 
@@ -41,7 +49,7 @@ public class NoteWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+
 
     }
 
