@@ -11,20 +11,19 @@ public class Users {
     private String email;
 
 
-
-
-
-    public Users(){
+    public Users() {
 
     }
-    public Users(String photoUrl,String name, String email){
-        this.photoUrl=photoUrl;
 
-        this.name=name;
-        this.email=email;
+    public Users(String photoUrl, String name, String email) {
+        this.photoUrl = photoUrl;
+
+        this.name = name;
+        this.email = email;
 
 
     }
+
     public String getPhotoUrl() {
         return photoUrl;
     }

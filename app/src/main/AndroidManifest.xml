@@ -47,8 +47,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/note_widget_provider_info" />
         </receiver>
-        <service android:name=".widget.ListWidgetService"
+        <service
+            android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"></service>
+        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>

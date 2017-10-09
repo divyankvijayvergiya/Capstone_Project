@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_share) {
+            Intent intent = new Intent(MainActivity.this, TestActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
             AuthUI.getInstance().signOut(this);
@@ -172,9 +174,9 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,R.string.sign_in, Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Sign in Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,R.string.cancel_sign_in, Toast.LENGTH_LONG).show();
                 finish();
 
             }

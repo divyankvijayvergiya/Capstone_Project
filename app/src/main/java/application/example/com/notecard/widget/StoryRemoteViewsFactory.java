@@ -1,7 +1,5 @@
 package application.example.com.notecard.widget;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import application.example.com.notecard.Model.Stories;
@@ -34,12 +33,11 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private DatabaseReference firebaseDatabase;
     private ArrayList<Stories> storiesArrayList;
     private CountDownLatch mCountDownLatch;
-    public final String TITLE="title" ;
-    public final String KEY="key" ;
+    public final String TITLE = "title";
+    public final String KEY = "key";
 
-    public final String CONTENT="content";
-    public final String TIMESTAMP="timeStamp";
-
+    public final String CONTENT = "content";
+    public final String TIMESTAMP = "timeStamp";
 
 
     public StoryRemoteViewsFactory(Context appliationContext, Intent intent) {
@@ -58,8 +56,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         getItems();
 
 
-
-
     }
 
 
@@ -67,38 +63,40 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
 
-        final String noteId = firebaseDatabase.getRef().getKey();
-        Log.d(TAG+" Key", noteId);
+        final String noteId = firebaseDatabase.push().getRef().getKey();
+        Log.d(TAG + " Key", noteId);
 
-            firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                        Stories stories = dataSnapshot.getValue(Stories.class);
-                        Log.d(TAG+" Stories", String.valueOf(stories));
+        firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.getValue() != null) {
+                        Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
+                        for (Map.Entry<String, Stories> entry : value.entrySet()) {
+                            String key = entry.getKey();
+                            Stories va = entry.getValue();
+                            if (!storiesArrayList.contains(va)) {
+                                storiesArrayList.add(va);
+                                Log.d("jjjjjjj", key + " " + va);
+                            }
 
-
-                        storiesArrayList.add(stories);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                                new ComponentName(mContext, getClass()));
-                        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
-
-
-
-
-
-
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            }
 
-                }
-            });
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
-
 
 
     @Override

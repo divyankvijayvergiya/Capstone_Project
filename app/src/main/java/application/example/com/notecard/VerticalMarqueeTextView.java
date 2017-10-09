@@ -18,12 +18,10 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
     private int pixelYOffSet;
 
     /**
-     *
      * Creates a vertically auto scrolling marquee of a TextView within an
      * Activity. The (long) duration in milliseconds between calls to the next
      * scrollBy(0, pixelYOffSet). Defaults to 65L. The (int) amount of Y pixels
      * to scroll by defaults to 1.
-     *
      */
     public VerticalMarqueeTextView(Context context, AttributeSet attrs,
                                    int defStyle) {
@@ -35,12 +33,10 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
     }
 
     /**
-     *
      * Creates a vertically auto scrolling marquee of a TextView within an
      * Activity. The (long) duration in milliseconds between calls to the next
      * scrollBy(0, pixelYOffSet). Defaults to 65L. The (int) amount of Y pixels
      * to scroll by defaults to 1.
-     *
      */
     public VerticalMarqueeTextView(Context context, AttributeSet attrs) {
 
@@ -52,12 +48,10 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
     }
 
     /**
-     *
      * Creates a vertically auto scrolling marquee of a TextView within an
      * Activity. The (long) duration in milliseconds between calls to the next
      * scrollBy(0, pixelYOffSet). Defaults to 65L. The (int) amount of Y pixels
      * to scroll by defaults to 1.
-     *
      */
     public VerticalMarqueeTextView(Context context) {
         super(context);
@@ -82,17 +76,16 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
 
     /**
      * @return Returns the (long) duration in milliseconds between calls to the
-     *         next scrollBy(0, pixelYOffSet).
+     * next scrollBy(0, pixelYOffSet).
      */
     public long getDuration() {
         return duration;
     }
 
     /**
-     * @param duration
-     *            Sets the (long) duration in milliseconds between calls to the
-     *            next scrollBy(0, pixelYOffSet). Defaults to 65L if value is
-     *            less than or equal to 0.
+     * @param duration Sets the (long) duration in milliseconds between calls to the
+     *                 next scrollBy(0, pixelYOffSet). Defaults to 65L if value is
+     *                 less than or equal to 0.
      */
     public void setDuration(long duration) {
         if (duration <= 0) {
@@ -111,9 +104,8 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
     }
 
     /**
-     * @param pixelYOffSet
-     *            Sets the (int) amount of Y pixels to scroll by. Defaults to 1
-     *            if value is less.
+     * @param pixelYOffSet Sets the (int) amount of Y pixels to scroll by. Defaults to 1
+     *                     if value is less.
      */
     public void setPixelYOffSet(int pixelYOffSet) {
         if (pixelYOffSet < 1) {
@@ -153,7 +145,7 @@ public class VerticalMarqueeTextView extends android.support.v7.widget.AppCompat
 
     /**
      * @return Returns true if paused (including if paused do to user manually
-     *         scrolling), false otherwise.
+     * scrolling), false otherwise.
      */
     public boolean isPaused() {
         if (isPaused || isUserScrolling) {

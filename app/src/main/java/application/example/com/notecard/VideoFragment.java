@@ -64,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback,SharedPreferences.OnSharedPreferenceChangeListener {
+        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String CONTENT = "content";
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
@@ -106,7 +106,6 @@ public class VideoFragment extends Fragment
     private AudioManager audioManager;
     private NotificationManager notificationManager;
     private Context mContext;
-
 
 
     /**
@@ -298,21 +297,19 @@ public class VideoFragment extends Fragment
         tvCamera = (VerticalMarqueeTextView) view.findViewById(R.id.text_camera);
         ivRotateFront = (ImageView) view.findViewById(R.id.iv_rotate_front);
         ivRotateBack = (ImageView) view.findViewById(R.id.iv_rotate_back);
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         boolean silentMode = sharedPreferences.getBoolean(getString(R.string.silent_mode), true);
-        audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         tvCamera.getDuration();
-
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && !notificationManager.isNotificationPolicyAccessGranted()) {
             Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
             getActivity().startActivity(intent);
-        }
-        else {
+        } else {
             if (silentMode) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             } else {
@@ -343,9 +340,10 @@ public class VideoFragment extends Fragment
 
         view.findViewById(R.id.info).setOnClickListener(this);
     }
-    private void loadSpeedFromSharedPreferences(SharedPreferences sharedPreferences){
-        int minSize=Integer.parseInt(sharedPreferences.getString(getString(R.string.speed)
-                ,getString(R.string.speed_default)));
+
+    private void loadSpeedFromSharedPreferences(SharedPreferences sharedPreferences) {
+        int minSize = Integer.parseInt(sharedPreferences.getString(getString(R.string.speed)
+                , getString(R.string.speed_default)));
         tvCamera.setPixelYOffSet(minSize);
     }
 
@@ -385,7 +383,7 @@ public class VideoFragment extends Fragment
                 startBackgroundThread();
                 if (mTextureView.isAvailable()) {
 
-                    ROTATE = "fulfilled";
+                    ROTATE = getString(R.string.fulfill);
 
                     Log.e("Rotate", "" + ROTATE);
 
@@ -546,12 +544,12 @@ public class VideoFragment extends Fragment
         try {
             Log.d(TAG, "tryAcquire");
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
-                throw new RuntimeException("Time out waiting to lock camera opening.");
+                throw new RuntimeException(getString(R.string.time_out));
             }
 
-            if(ROTATE != null){
+            if (ROTATE != null) {
 
-                Log.e("FrontCamera", "Test");
+                Log.e(getString(R.string.front_camera), getString(R.string.test));
 
                 cameraId = manager.getCameraIdList()[1];
 
@@ -559,7 +557,7 @@ public class VideoFragment extends Fragment
 
             } else {
 
-                Log.e("BackCamera", "Test");
+                Log.e(getString(R.string.back_camera),getString(R.string.test));
 
                 cameraId = manager.getCameraIdList()[0];
 
@@ -598,7 +596,7 @@ public class VideoFragment extends Fragment
 
 
         } catch (CameraAccessException e) {
-            Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,R.string.not_access, Toast.LENGTH_SHORT).show();
             activity.finish();
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
@@ -606,7 +604,7 @@ public class VideoFragment extends Fragment
             ErrorDialog.newInstance(getString(R.string.camera_error))
                     .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera opening.");
+            throw new RuntimeException(getString(R.string.lock_camera_interrupt));
         }
     }
 
@@ -623,7 +621,7 @@ public class VideoFragment extends Fragment
                 mMediaRecorder = null;
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera closing.");
+            throw new RuntimeException(getString(R.string.camera_close_interrupt));
         } finally {
             mCameraOpenCloseLock.release();
         }
@@ -658,7 +656,7 @@ public class VideoFragment extends Fragment
                 public void onConfigureFailed(CameraCaptureSession cameraCaptureSession) {
                     Activity activity = getActivity();
                     if (null != activity) {
-                        Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity,R.string.failed , Toast.LENGTH_SHORT).show();
                     }
                 }
             }, mBackgroundHandler);
@@ -676,7 +674,7 @@ public class VideoFragment extends Fragment
         }
         try {
             setUpCaptureRequestBuilder(mPreviewBuilder);
-            HandlerThread thread = new HandlerThread("CameraPreview");
+            HandlerThread thread = new HandlerThread(getString(R.string.preview));
             thread.start();
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
         } catch (CameraAccessException e) {
@@ -801,7 +799,7 @@ public class VideoFragment extends Fragment
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
                     Activity activity = getActivity();
                     if (null != activity) {
-                        Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity,R.string.failed, Toast.LENGTH_SHORT).show();
                     }
                 }
             }, mBackgroundHandler);
@@ -830,9 +828,9 @@ public class VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
+            Toast.makeText(activity,R.string.video_save + mNextVideoAbsolutePath,
                     Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+            Log.d(TAG, R.string.video_save + mNextVideoAbsolutePath);
         }
         mNextVideoAbsolutePath = null;
         startPreview();
@@ -840,7 +838,7 @@ public class VideoFragment extends Fragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(getString(R.string.silent_mode))) {
+        if (key.equals(getString(R.string.silent_mode))) {
             boolean silentMode = sharedPreferences.getBoolean(key, true);
             audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
             notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -857,8 +855,7 @@ public class VideoFragment extends Fragment
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 }
             }
-        }
-        else if(key.equals(getString(R.string.speed))){
+        } else if (key.equals(getString(R.string.speed))) {
             loadSpeedFromSharedPreferences(sharedPreferences);
         }
 

@@ -5,11 +5,11 @@
         <item
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_speaker_notes_black_24px"
-            android:title="My Stories" />
+            android:title="@string/my_stories" />
         <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_black_24px"
-            android:title="Feedback" />
+            android:title="@string/feedback" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_person_black_24px"
@@ -17,7 +17,7 @@
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:title="@string/settings" />
     </group>
 
     <item android:title="Communicate">
@@ -29,13 +29,13 @@
 
         </menu>
     </item>
-  <item android:title="">
-      <menu>
+    <item android:title="">
+        <menu>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_power_settings_new_black_24px"
-                android:title="Logout"></item>
+                android:title="@string/logout"></item>
         </menu>
-  </item>
+    </item>
 
 </menu>

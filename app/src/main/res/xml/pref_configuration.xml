@@ -3,8 +3,8 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="@string/silent_mode"
-        android:summaryOff="Device is not in silent mode while recording"
-        android:summaryOn="Device in Silent Mode while recording"
+        android:summaryOff="@string/not_silent"
+        android:summaryOn="@string/silent"
         android:title="Silent Mode"></CheckBoxPreference>
     <EditTextPreference
         android:defaultValue="@string/speed_default"

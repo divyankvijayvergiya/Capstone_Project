@@ -19,18 +19,19 @@ public class Stories implements Parcelable {
     private String content;
 
 
-
     private Long timeStamp;
 
-    public Stories(){
+    public Stories() {
 
     }
-    public Stories(String title,String content){
-        this.title=title;
-        this.content=content;
+
+    public Stories(String title, String content) {
+        this.title = title;
+        this.content = content;
 
 
     }
+
     public String getTitle() {
         return title;
     }
@@ -46,6 +47,7 @@ public class Stories implements Parcelable {
     public void setContent(String content) {
         this.content = content;
     }
+
     public Long getTimeStamp() {
         return timeStamp;
     }
@@ -59,8 +61,8 @@ public class Stories implements Parcelable {
     public Map<String, Object> toMap() {
 
         HashMap<String, Object> result = new HashMap<>();
-        result.put("title",title );
-        result.put("content",content );
+        result.put("title", title);
+        result.put("content", content);
         result.put("timeStamp", ServerValue.TIMESTAMP);
 
 

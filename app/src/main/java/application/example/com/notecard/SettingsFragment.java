@@ -14,22 +14,22 @@ import android.widget.Toast;
  */
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
-        SharedPreferences.OnSharedPreferenceChangeListener,Preference.OnPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-          addPreferencesFromResource(R.xml.pref_configuration);
-        Preference preference=findPreference(getString(R.string.speed));
+        addPreferencesFromResource(R.xml.pref_configuration);
+        Preference preference = findPreference(getString(R.string.speed));
         preference.setOnPreferenceChangeListener(this);
 
-        SharedPreferences sharedPreferences=getPreferenceScreen().getSharedPreferences();
-        PreferenceScreen preferenceScreen=getPreferenceScreen();
-        int count=preferenceScreen.getPreferenceCount();
-            // For EditTextPreferences, set the summary to the value's simple string representation.
+        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        PreferenceScreen preferenceScreen = getPreferenceScreen();
+        int count = preferenceScreen.getPreferenceCount();
+        // For EditTextPreferences, set the summary to the value's simple string representation.
         for (int i = 0; i < count; i++) {
             Preference p = preferenceScreen.getPreference(i);
             if (!(preference instanceof CheckBoxPreference)) {
                 String value = sharedPreferences.getString(preference.getKey(), "");
-                setPreferenceSummary(p,value);
+                setPreferenceSummary(p, value);
             }
         }
     }
@@ -41,11 +41,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             // Updates the summary for the preference
             if (!(preference instanceof CheckBoxPreference)) {
                 String value = sharedPreferences.getString(preference.getKey(), "");
-             setPreferenceSummary(preference,value);
+                setPreferenceSummary(preference, value);
             }
         }
 
-        }
+    }
+
     private void setPreferenceSummary(Preference preference, String value) {
 
         if (preference instanceof EditTextPreference) {
@@ -57,19 +58,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Toast error=Toast.makeText(getContext(),"Please select number between 0  to 15 included",Toast.LENGTH_LONG);
-        String sizeKey=getString(R.string.speed);
-        if(preference.getKey().equals(sizeKey)) {
+        Toast error = Toast.makeText(getContext(),R.string.speed_number, Toast.LENGTH_LONG);
+        String sizeKey = getString(R.string.speed);
+        if (preference.getKey().equals(sizeKey)) {
             String stringSize = ((String) (newValue)).trim();
             if (stringSize.equals("")) stringSize = "1";
             try {
-                float size=Float.parseFloat(stringSize);
-                if(size>15||size<=0){
+                float size = Float.parseFloat(stringSize);
+                if (size > 15 || size <= 0) {
                     error.show();
                     return false;
                 }
 
-            }catch (NumberFormatException nfe){
+            } catch (NumberFormatException nfe) {
                 error.show();
                 return false;
             }
@@ -78,6 +79,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
         return true;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

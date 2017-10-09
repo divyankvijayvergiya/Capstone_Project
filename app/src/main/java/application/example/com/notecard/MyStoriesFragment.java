@@ -29,19 +29,19 @@ import application.example.com.notecard.Model.Stories;
  * Created by Dell on 20-09-2017.
  */
 
-public class MyStoriesFragment extends Fragment  {
+public class MyStoriesFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    public final String TITLE="title" ;
-    public final String KEY="key" ;
+    public final String TITLE = "title";
+    public final String KEY = "key";
 
-    public final String CONTENT="content";
-    public final String TIMESTAMP="timeStamp";
+    public final String CONTENT = "content";
+    public final String TIMESTAMP = "timeStamp";
     private ProgressBar dialog;
 
-    public MyStoriesFragment(){
+    public MyStoriesFragment() {
 
     }
 
@@ -49,23 +49,20 @@ public class MyStoriesFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.story_fragment, container, false);
-         dialog=new ProgressBar(getActivity());
+        dialog = new ProgressBar(getActivity());
         dialog.setVisibility(View.VISIBLE);
 
-        mRecyclerView= (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
 
-
-        firebaseAuth=FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser()!=null){
-            databaseReference= FirebaseDatabase.getInstance().getReference().child("nodes")
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
                     .child(firebaseAuth.getCurrentUser().getUid());
         }
-
-
 
 
         return rootView;
@@ -75,11 +72,11 @@ public class MyStoriesFragment extends Fragment  {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Stories, NoteViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Stories, NoteViewHolder>(
-                Stories.class, R.layout.list_notes,NoteViewHolder.class,databaseReference) {
+        FirebaseRecyclerAdapter<Stories, NoteViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Stories, NoteViewHolder>(
+                Stories.class, R.layout.list_notes, NoteViewHolder.class, databaseReference) {
             @Override
             protected void populateViewHolder(final NoteViewHolder viewHolder, Stories model, int position) {
-                final String noteId=getRef(position).getKey();
+                final String noteId = getRef(position).getKey();
                 databaseReference.child(noteId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,7 +104,7 @@ public class MyStoriesFragment extends Fragment  {
                                     }
                                 });
                             }
-                        }else{
+                        } else {
                             Toast.makeText(getActivity(), getString(R.string.internet), Toast.LENGTH_SHORT).show();
 
                         }

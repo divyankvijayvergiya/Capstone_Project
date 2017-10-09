@@ -15,20 +15,20 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Toolbar toolbar= (Toolbar) findViewById(R.id.settings_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             onBackPressed();
         }
-            return true;
+        return true;
 
     }
-    }
+}
 

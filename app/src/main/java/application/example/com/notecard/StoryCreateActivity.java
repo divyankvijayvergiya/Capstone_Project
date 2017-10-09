@@ -42,6 +42,7 @@ import application.example.com.notecard.Model.Stories;
 
 public class StoryCreateActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int REQUEST_VIDEO_CAPTURE = 1;
+    public static final String TAG = StoryCreateActivity.class.getSimpleName();
 
     private EditText etTitle;
     private EditText etNote;
@@ -50,12 +51,16 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth;
     public int index = 0;
-    public final String TITLE = "title";
-    public final String CONTENT = "content";
+    public final static String TITLE = "title";
+    public final static String CONTENT = "content";
+    public final static String TIMESTAMP = "timeStamp";
+    public final static String KEY = "key";
     private String noteId;
     private ImageButton btEdit;
     private TextView tvSave;
     private String myContent;
+    public final static String NODE = "nodes";
+    public final static String VIDEO = "videos";
 
 
     private StorageReference mStorageReference;
@@ -81,9 +86,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         btDone.setOnClickListener(this);
         btDelete.setOnClickListener(this);
         firebaseAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("nodes")
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child(NODE)
                 .child(firebaseAuth.getCurrentUser().getUid());
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("videos")
+        mStorageReference = FirebaseStorage.getInstance().getReference().child(VIDEO)
                 .child(firebaseAuth.getCurrentUser().getUid());
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
@@ -94,7 +99,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         if (intent != null) {
             etTitle.setText(intent.getStringExtra(TITLE));
             etNote.setText(intent.getStringExtra(CONTENT));
-            noteId = getIntent().getStringExtra("key");
+            noteId = getIntent().getStringExtra(KEY);
 
             if (noteId != null) {
                 btDone.setVisibility(View.GONE);
@@ -119,16 +124,16 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
 
             } else {
-                Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, R.string.empty_fields, Snackbar.LENGTH_LONG).show();
             }
         } else if (v == btDelete) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
 
-                if (!noteId.equals("key")) {
+                if (!noteId.equals(KEY)) {
                     deleteNote();
                 }
-            }else{
-                Toast.makeText(StoryCreateActivity.this, "Not Possible to delete", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(StoryCreateActivity.this, R.string.not_deleted, Toast.LENGTH_SHORT).show();
 
 
             }
@@ -137,21 +142,20 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         } else if (v == btEdit) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 updateData(title, content);
-                Toast.makeText(StoryCreateActivity.this, "Data Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StoryCreateActivity.this, R.string.data_updated, Toast.LENGTH_SHORT).show();
 
             } else {
-                Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, R.string.empty_fields, Snackbar.LENGTH_LONG).show();
 
             }
         } else if (v == tvSave) {
             if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
                 updateData(title, content);
-                Toast.makeText(StoryCreateActivity.this, "Data Updated", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(StoryCreateActivity.this, R.string.data_updated, Toast.LENGTH_SHORT).show();
 
 
             } else {
-                Snackbar.make(v, "Please fill empty fields", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, R.string.empty_fields, Snackbar.LENGTH_LONG).show();
 
             }
 
@@ -166,13 +170,13 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
 
             noteId = newDatabaseReference.getKey();
-            Log.d("Note key", noteId);
+            Log.d(TAG + KEY, noteId);
 
 
             final Map noteMap = new HashMap();
             noteMap.put(TITLE, title);
             noteMap.put(CONTENT, content);
-            noteMap.put("timeStamp", ServerValue.TIMESTAMP);
+            noteMap.put(TIMESTAMP, ServerValue.TIMESTAMP);
             Thread mainThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -180,14 +184,14 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(StoryCreateActivity.this, "Note added to database", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(StoryCreateActivity.this, R.string.data_added, Toast.LENGTH_SHORT).show();
 
                                 myContent = content;
-                                Log.d("content", myContent);
+                                Log.d(CONTENT, myContent);
 
 
                             } else {
-                                Toast.makeText(StoryCreateActivity.this, "ERROR: ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(StoryCreateActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
 
 
                             }
@@ -201,7 +205,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
 
         } else {
-            Toast.makeText(StoryCreateActivity.this, "User is not Signed in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StoryCreateActivity.this, R.string.not_signed, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -212,14 +216,14 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(StoryCreateActivity.this, "Notes Deleted", Toast.LENGTH_SHORT).show();
-                    noteId = "key";
+                    Toast.makeText(StoryCreateActivity.this, R.string.delete_notes, Toast.LENGTH_SHORT).show();
+                    noteId = KEY;
                     finish();
 
 
                 } else {
-                    Log.e("StoryCreateFragment", task.getException().toString());
-                    Toast.makeText(StoryCreateActivity.this, "ERROR: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, task.getException().toString());
+                    Toast.makeText(StoryCreateActivity.this, R.string.error + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -239,10 +243,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
             mDatabaseReference.updateChildren(childUpdates);
             noteId = mDatabaseReference.push().getKey();
-            Log.d("Note key", noteId);
+            Log.d(TAG + KEY, noteId);
 
             myContent = content;
-            Log.d("content", myContent);
+            Log.d(CONTENT, myContent);
 
 
         }
@@ -267,7 +271,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
-                    Toast.makeText(StoryCreateActivity.this, "Video Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StoryCreateActivity.this, R.string.video_upload, Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -301,7 +305,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
 
 
             newIntent.putExtra(CONTENT, myContent);
-            newIntent.putExtra("key", noteId);
+            newIntent.putExtra(KEY, noteId);
             startActivity(newIntent);
 
 
