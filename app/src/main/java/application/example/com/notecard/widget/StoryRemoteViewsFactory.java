@@ -53,8 +53,13 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onDataSetChanged() {
+        mCountDownLatch = new CountDownLatch(1);
         getItems();
-
+        try {
+            mCountDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -66,35 +71,72 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         final String noteId = firebaseDatabase.push().getRef().getKey();
         Log.d(TAG + " Key", noteId);
 
-        firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    if (dataSnapshot.getValue() != null) {
-                        Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
-                        for (Map.Entry<String, Stories> entry : value.entrySet()) {
-                            String key = entry.getKey();
-                            Stories va = entry.getValue();
-                            if (!storiesArrayList.contains(va)) {
-                                storiesArrayList.add(va);
-                                Log.d("jjjjjjj", key + " " + va);
-                            }
+        if (mCountDownLatch.getCount() == 0) {
+            firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.getValue() != null) {
+                            Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
+                            for (Map.Entry<String, Stories> entry : value.entrySet()) {
+                                String key = entry.getKey();
+                                Stories va = entry.getValue();
+                                if (!storiesArrayList.contains(va)) {
+                                    storiesArrayList.add(va);
+                                    Log.d("jjjjjjj", key + " " + va);
+                                }
 
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
 
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        }else{
+            if(storiesArrayList!=null){
+                firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            if (dataSnapshot.getValue() != null) {
+                                Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
+                                for (Map.Entry<String, Stories> entry : value.entrySet()) {
+                                    String key = entry.getKey();
+                                    Stories va = entry.getValue();
+                                    if (!storiesArrayList.contains(va)) {
+                                        storiesArrayList.add(va);
+                                        Log.d("jjjjjjj", key + " " + va);
+                                    }
+
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
+            mCountDownLatch.countDown();
 
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        }
 
     }
 
