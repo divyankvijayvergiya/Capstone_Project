@@ -77,7 +77,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                     for(DataSnapshot child : children) {
                         String key=dataSnapshot.getKey();
                         Stories stories = child.getValue(Stories.class);
-
                         storiesArrayList.add(stories);
                         noteId = key;
                     }
