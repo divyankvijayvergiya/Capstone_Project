@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import application.example.com.notecard.Model.Stories;
@@ -43,7 +42,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     public StoryRemoteViewsFactory(Context appliationContext, Intent intent) {
         mContext = appliationContext;
-        storiesArrayList = new ArrayList<>();
+        storiesArrayList = new ArrayList<Stories>();
     }
 
     @Override
@@ -72,23 +71,12 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
             firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    try {
-                        if (dataSnapshot.getValue() != null) {
-                            Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
-                            for (Map.Entry<String, Stories> entry : value.entrySet()) {
-                                String key = entry.getKey();
-                                Stories va = entry.getValue();
-                                if (!storiesArrayList.contains(va)) {
-                                    storiesArrayList.add(va);
-                                    Log.d("jjjjjjj", key + " " + va);
-                                }
-
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    Iterable<DataSnapshot> children=  dataSnapshot.getChildren();
+                    for(DataSnapshot child : children){
+                        Stories stories=child.getValue(Stories.class);
+                        storiesArrayList.add(stories);
                     }
+
 
                 }
 
