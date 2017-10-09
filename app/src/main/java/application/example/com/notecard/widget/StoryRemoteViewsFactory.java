@@ -35,6 +35,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private CountDownLatch mCountDownLatch;
     public final String TITLE = "title";
     public final String KEY = "key";
+   public  String noteId;
 
     public final String CONTENT = "content";
     public final String TIMESTAMP = "timeStamp";
@@ -53,13 +54,8 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onDataSetChanged() {
-        mCountDownLatch = new CountDownLatch(1);
         getItems();
-        try {
-            mCountDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
@@ -68,13 +64,15 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
 
-        final String noteId = firebaseDatabase.push().getRef().getKey();
+          noteId = firebaseDatabase.getRef().getKey();
         Log.d(TAG + " Key", noteId);
 
-        if (mCountDownLatch.getCount() == 0) {
-            firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+            firebaseDatabase.child(noteId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                     try {
                         if (dataSnapshot.getValue() != null) {
                             Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
@@ -102,43 +100,10 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                 }
             });
 
-        }else{
-            if(storiesArrayList!=null){
-                firebaseDatabase.child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        try {
-                            if (dataSnapshot.getValue() != null) {
-                                Map<String, Stories> value = (Map<String, Stories>) dataSnapshot.getValue();
-                                for (Map.Entry<String, Stories> entry : value.entrySet()) {
-                                    String key = entry.getKey();
-                                    Stories va = entry.getValue();
-                                    if (!storiesArrayList.contains(va)) {
-                                        storiesArrayList.add(va);
-                                        Log.d("jjjjjjj", key + " " + va);
-                                    }
-
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-            mCountDownLatch.countDown();
 
         }
 
-    }
+
 
 
     @Override

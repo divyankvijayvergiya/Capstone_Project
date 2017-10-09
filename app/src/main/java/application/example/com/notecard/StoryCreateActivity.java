@@ -55,7 +55,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
     public final static String CONTENT = "content";
     public final static String TIMESTAMP = "timeStamp";
     public final static String KEY = "key";
-    private String noteId;
+    public static String noteId;
     private ImageButton btEdit;
     private TextView tvSave;
     private String myContent;
@@ -298,16 +298,10 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
             return true;
         }
         if (id == R.id.action_video) {
-            Intent intent = getIntent();
-
-
             Intent newIntent = new Intent(StoryCreateActivity.this, VideoActivity.class);
-
-
             newIntent.putExtra(CONTENT, myContent);
             newIntent.putExtra(KEY, noteId);
             startActivity(newIntent);
-
 
             return true;
         }

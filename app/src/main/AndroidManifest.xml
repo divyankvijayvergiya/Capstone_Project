@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="application.example.com.notecard.WIDGET_PERMISSION"></uses-permission>
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -51,6 +52,10 @@
             android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"></service>
         <activity android:name=".TestActivity"></activity>
+        <permission
+            android:name="application.example.com.notecard.WIDGET_PERMISSION"
+
+            android:protectionLevel="normal"></permission>
     </application>
 
 </manifest>
