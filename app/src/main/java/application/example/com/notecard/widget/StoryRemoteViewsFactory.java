@@ -32,12 +32,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private DatabaseReference firebaseDatabase;
     private ArrayList<Stories> storiesArrayList;
     private CountDownLatch mCountDownLatch;
-    public final String TITLE = "title";
-    public final String KEY = "key";
-   public  String noteId;
-
-    public final String CONTENT = "content";
-    public final String TIMESTAMP = "timeStamp";
 
 
     public StoryRemoteViewsFactory(Context appliationContext, Intent intent) {
@@ -47,16 +41,11 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
-
-
-
-
     }
-
 
     @Override
     public void onDataSetChanged() {
-        mCountDownLatch=new CountDownLatch(1);
+        mCountDownLatch = new CountDownLatch(1);
 
         getItems();
         try {
@@ -66,43 +55,41 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         }
 
 
-
-
-
-
-
     }
 
 
     private void getItems() {
         firebaseAuth = FirebaseAuth.getInstance();
+
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
         if (mCountDownLatch.getCount() == 0) {
-            firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                        for (DataSnapshot child : children) {
-                            String key = child.getKey();
-                            Stories stories = child.getValue(Stories.class);
-                            storiesArrayList.add(stories);
+            if (storiesArrayList != null) {
+                firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                            for (DataSnapshot child : children) {
+                                String key = child.getKey();
+                                Stories stories = child.getValue(Stories.class);
+                                storiesArrayList.add(stories);
 
+                            }
                         }
+
+
                     }
 
 
-                }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
 
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        }else{
-            if(storiesArrayList !=null){
+                    }
+                });
+            }
+        } else {
+            if (storiesArrayList != null) {
                 firebaseDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,12 +122,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         }
 
 
-          }
-
-
-
-
-
+    }
 
 
     @Override
