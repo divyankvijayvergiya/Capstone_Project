@@ -47,6 +47,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
+        getItems();
 
 
 
@@ -72,6 +73,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseDatabase.addValueEventListener(new ValueEventListener() {
                   @Override
                   public void onDataChange(DataSnapshot dataSnapshot) {
+                      storiesArrayList.clear();
                       if (dataSnapshot.getValue() != null) {
 
                           Iterable<DataSnapshot> children = dataSnapshot.getChildren();
