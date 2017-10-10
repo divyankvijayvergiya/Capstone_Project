@@ -4,7 +4,7 @@
     android:initialLayout="@layout/note_widget_provider"
     android:minHeight="200dp"
     android:minWidth="200dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@mipmap/teleicon"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"></appwidget-provider>
