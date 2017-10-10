@@ -132,7 +132,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public int getCount() {
-        if (storiesArrayList != null &&!storiesArrayList.isEmpty()) {
+        if (storiesArrayList != null && !storiesArrayList.isEmpty()) {
             Log.d(TAG + "items", String.valueOf(storiesArrayList.size()));
 
             return storiesArrayList.size();
@@ -144,7 +144,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
-        if (storiesArrayList.size()>0) {
+        if (storiesArrayList.size() > 0) {
 
 
             remoteViews.setTextViewText(R.id.widget_title_note, storiesArrayList.get(position).getTitle());
