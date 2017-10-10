@@ -330,7 +330,7 @@ public class VideoFragment extends Fragment
 
 
         } else {
-            Toast.makeText(getActivity(), "No Content", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.no_content, Toast.LENGTH_SHORT).show();
         }
 
 

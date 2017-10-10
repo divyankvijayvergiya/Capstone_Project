@@ -82,7 +82,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                               Stories stories = child.getValue(Stories.class);
                               storiesArrayList.add(stories);
 
-
                           }
                       }
 

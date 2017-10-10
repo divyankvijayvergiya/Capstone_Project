@@ -10,25 +10,14 @@
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_black_24px"
             android:title="@string/feedback" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_person_black_24px"
-            android:title="My Account" />
+
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/settings" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share App" />
 
-        </menu>
-    </item>
     <item android:title="">
         <menu>
             <item

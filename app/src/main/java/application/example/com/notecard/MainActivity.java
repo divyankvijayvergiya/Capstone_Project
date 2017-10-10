@@ -1,6 +1,7 @@
 package application.example.com.notecard;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -133,9 +134,12 @@ public class MainActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_feedback) {
+           String[] address=new String[]{
+                 getString( R.string.my_mail)
+           };
+           String subject=getString(R.string.subject);
+            composeEmail(address,subject);
 
-
-        } else if (id == R.id.nav_profile) {
 
 
         } else if (id == R.id.nav_manage) {
@@ -143,17 +147,22 @@ public class MainActivity extends AppCompatActivity
             startActivity(settingsIntent);
 
 
-        } else if (id == R.id.nav_share) {
-            Intent intent = new Intent(MainActivity.this, TestActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_logout) {
+        }  else if (id == R.id.nav_logout) {
             AuthUI.getInstance().signOut(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void composeEmail(String[] addresses, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse(getString(R.string.mail_to))); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
 

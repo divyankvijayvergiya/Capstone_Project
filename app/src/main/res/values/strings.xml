@@ -61,6 +61,12 @@
     <string name="time_out">Time out waiting to lock camera opening.</string>
     <string name="name_user">Android Studio</string>
     <string name="user_email">android.studio@android.com</string>
+    <string name="my_mail"> divyankvijay.96@gmail.com</string>
+    <string name="subject">Write your problem brief description here</string>
+    <string name="mail_to">mailto:</string>
+    <string name="no_content">No Content</string>
+    <string name="upload_video">Uploading Video...</string>
+
     <string name="intro_message">
         <![CDATA[
 

@@ -51,11 +51,10 @@
         <service
             android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"></service>
-        <activity android:name=".TestActivity"></activity>
-        <permission
-            android:name="application.example.com.notecard.WIDGET_PERMISSION"
 
-            android:protectionLevel="normal"></permission>
     </application>
+    <permission
+        android:name="application.example.com.notecard.WIDGET_PERMISSION"
 
+        android:protectionLevel="normal"></permission>
 </manifest>
