@@ -22,6 +22,8 @@
             android:id="@+id/widget_title_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="25sp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
             android:text="@string/title_note" />
