@@ -1,7 +1,5 @@
 package application.example.com.notecard.widget;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -71,10 +69,7 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
 
-
-
-
-              firebaseDatabase.addValueEventListener(new ValueEventListener() {
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
                   @Override
                   public void onDataChange(DataSnapshot dataSnapshot) {
                       if (dataSnapshot.getValue() != null) {
@@ -84,11 +79,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                               String key = child.getKey();
                               Stories stories = child.getValue(Stories.class);
                               storiesArrayList.add(stories);
-                              AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                              int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                                      new ComponentName(mContext, getClass()));
-                              appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
-
 
 
                           }
