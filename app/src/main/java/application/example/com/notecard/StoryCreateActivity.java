@@ -1,6 +1,8 @@
 package application.example.com.notecard;
 
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import application.example.com.notecard.Model.Stories;
+import application.example.com.notecard.widget.NoteWidgetProvider;
 
 /**
  * Created by Dell on 23-09-2017.
@@ -185,6 +188,9 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, R.string.data_added, Toast.LENGTH_SHORT).show();
+                                int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NoteWidgetProvider.class));
+
+                                AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(widgetIDs, R.id.widget_list_view);
 
                                 myContent = content;
                                 Log.d(CONTENT, myContent);

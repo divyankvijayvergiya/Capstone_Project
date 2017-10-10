@@ -1,5 +1,7 @@
 package application.example.com.notecard.widget;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,19 +51,17 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     public void onCreate() {
 
 
+
     }
 
     @Override
     public void onDataSetChanged() {
-        mCountDownLatch=new CountDownLatch(1);
-
-
         getItems();
-        try {
-            mCountDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
+
+
+
 
 
     }
@@ -73,7 +73,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
 
 
-          if(mCountDownLatch.getCount()==0) {
 
               firebaseDatabase.addValueEventListener(new ValueEventListener() {
                   @Override
@@ -84,8 +83,12 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                           for (DataSnapshot child : children) {
                               String key = child.getKey();
                               Stories stories = child.getValue(Stories.class);
-                              noteId = key;
                               storiesArrayList.add(stories);
+                              AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                              int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                                      new ComponentName(mContext, getClass()));
+                              appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+
 
 
                           }
@@ -101,39 +104,12 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
                   }
               });
-          }else {
-              firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                  @Override
-                  public void onDataChange(DataSnapshot dataSnapshot) {
-                      if (dataSnapshot.getValue() != null) {
 
-                          Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                          for (DataSnapshot child : children) {
-                              String key = child.getKey();
-                              Stories stories = child.getValue(Stories.class);
-                              noteId = key;
-                              storiesArrayList.add(stories);
-
-
-                          }
-                      }
-
-
-                  }
-
-
-                  @Override
-                  public void onCancelled(DatabaseError databaseError) {
-                      Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
-
-                  }
-              });
-              mCountDownLatch.countDown();
 
           }
 
 
-        }
+
 
 
 
@@ -159,7 +135,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
         Stories stories = storiesArrayList.get(position);
         remoteViews.setTextViewText(R.id.widget_title_note, stories.getTitle());
-        remoteViews.setTextViewText(R.id.widget_time_note, stories.getContent());
         Bundle extras = new Bundle();
         extras.putParcelable(mContext.getString(R.string.stories), stories);
         Intent fillIntent = new Intent();
