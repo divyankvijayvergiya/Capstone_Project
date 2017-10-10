@@ -47,15 +47,23 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onCreate() {
-        getItems();
+
 
 
 
     }
 
+
     @Override
     public void onDataSetChanged() {
+        mCountDownLatch=new CountDownLatch(1);
+
         getItems();
+        try {
+            mCountDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -69,32 +77,63 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     private void getItems() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("nodes").child(firebaseAuth.getCurrentUser().getUid());
+        if (mCountDownLatch.getCount() == 0) {
+            firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        storiesArrayList.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            String key = child.getKey();
+                            Stories stories = child.getValue(Stories.class);
+                            storiesArrayList.add(stories);
 
-        firebaseDatabase.addValueEventListener(new ValueEventListener() {
-                  @Override
-                  public void onDataChange(DataSnapshot dataSnapshot) {
-                      storiesArrayList.clear();
-                      if (dataSnapshot.getValue() != null) {
-
-                          Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                          for (DataSnapshot child : children) {
-                              String key = child.getKey();
-                              Stories stories = child.getValue(Stories.class);
-                              storiesArrayList.add(stories);
-
-                          }
-                      }
-
-
-                  }
+                        }
+                    }
 
 
-                  @Override
-                  public void onCancelled(DatabaseError databaseError) {
-                      Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+                }
 
-                  }
-              });
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }else{
+            if(storiesArrayList !=null){
+                firebaseDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.getValue() != null) {
+                            storiesArrayList.clear();
+
+                            Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                            for (DataSnapshot child : children) {
+                                String key = child.getKey();
+                                Stories stories = child.getValue(Stories.class);
+                                storiesArrayList.add(stories);
+
+                            }
+                        }
+
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(mContext, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+            mCountDownLatch.countDown();
+        }
 
 
           }
