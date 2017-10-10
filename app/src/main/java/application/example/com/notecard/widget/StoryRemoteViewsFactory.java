@@ -82,7 +82,6 @@ public class StoryRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        storiesArrayList.clear();
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
                             String key = child.getKey();

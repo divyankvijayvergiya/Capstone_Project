@@ -188,10 +188,7 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(StoryCreateActivity.this, R.string.data_added, Toast.LENGTH_SHORT).show();
-                                int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NoteWidgetProvider.class));
-
-                                AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(widgetIDs, R.id.widget_list_view);
-
+                               updateWidgets();
                                 myContent = content;
                                 Log.d(CONTENT, myContent);
 
@@ -215,6 +212,14 @@ public class StoryCreateActivity extends AppCompatActivity implements View.OnCli
         }
 
 
+    }
+    public void updateWidgets() {
+        ComponentName name = new ComponentName(this, NoteWidgetProvider.class);
+        int[] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(name);
+        Intent intent = new Intent(this, NoteWidgetProvider.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        intent.putExtra(AppWidgetManager.ACTION_APPWIDGET_UPDATE, ids);
+        sendBroadcast(intent);
     }
 
     private void deleteNote() {
