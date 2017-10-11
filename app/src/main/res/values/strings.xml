@@ -48,7 +48,7 @@
     <string name="create_new_note">Create New Note</string>
     <string name="signed_in">Signed in!</string>
     <string name="cancel_sign_in">Sign in Cancelled</string>
-    <string name="speed_number">Please select number between 0  to 15 included</string>
+    <string name="speed_number">Please select a integer number between 0 to 15 included</string>
     <string name="video_save">Video saved: </string>
     <string name="failed">Failed </string>
     <string name="preview">CameraPreview</string>

@@ -64,8 +64,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             String stringSize = ((String) (newValue)).trim();
             if (stringSize.equals("")) stringSize = "1";
             try {
-                float size = Float.parseFloat(stringSize);
-                if (size > 15 || size <= 0) {
+                Integer size = Integer.parseInt(stringSize);
+                if ((size > 15 || size <= 0)) {
                     error.show();
                     return false;
                 }
