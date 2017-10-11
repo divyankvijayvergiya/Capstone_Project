@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -39,7 +38,6 @@ public class MyStoriesFragment extends Fragment {
 
     public final String CONTENT = "content";
     public final String TIMESTAMP = "timeStamp";
-    private ProgressBar dialog;
 
     public MyStoriesFragment() {
 
@@ -49,8 +47,6 @@ public class MyStoriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.story_fragment, container, false);
-        dialog = new ProgressBar(getActivity());
-        dialog.setVisibility(View.VISIBLE);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -104,7 +100,6 @@ public class MyStoriesFragment extends Fragment {
                                     }
                                 });
                             }
-                            dialog.setVisibility(View.INVISIBLE);
 
                         } else {
                             Toast.makeText(getActivity(), getString(R.string.internet), Toast.LENGTH_SHORT).show();
