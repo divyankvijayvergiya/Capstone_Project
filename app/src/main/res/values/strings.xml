@@ -66,6 +66,7 @@
     <string name="mail_to">mailto:</string>
     <string name="no_content">No Content</string>
     <string name="upload_video">Uploading Video...</string>
+    <string name="text_screen">Create your notes by clicking on plus button</string>
 
     <string name="intro_message">
         <![CDATA[

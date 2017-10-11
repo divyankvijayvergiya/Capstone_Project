@@ -104,6 +104,8 @@ public class MyStoriesFragment extends Fragment {
                                     }
                                 });
                             }
+                            dialog.setVisibility(View.INVISIBLE);
+
                         } else {
                             Toast.makeText(getActivity(), getString(R.string.internet), Toast.LENGTH_SHORT).show();
 
@@ -119,7 +121,6 @@ public class MyStoriesFragment extends Fragment {
             }
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
-        dialog.setVisibility(View.INVISIBLE);
     }
 
 

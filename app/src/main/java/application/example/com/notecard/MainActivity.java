@@ -75,17 +75,13 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    if (name != null) {
-                        name = firebaseUser.getDisplayName();
-                    } else {
-                        mName.setText(name);
-                    }
+
                     if (photo != null) {
                         photo = firebaseUser.getPhotoUrl().toString();
                     }
                     email = firebaseUser.getEmail();
 
-                    Picasso.with(MainActivity.this).load(photo).placeholder(R.drawable.ic_person_black_24px).into(imageView);
+                    Picasso.with(MainActivity.this).load(photo).placeholder(R.mipmap.teleicon).into(imageView);
 
                     mName.setText(name);
                     mEmail.setText(email);
