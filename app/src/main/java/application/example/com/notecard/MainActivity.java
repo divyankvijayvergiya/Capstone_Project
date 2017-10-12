@@ -143,7 +143,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(settingsIntent);
 
 
-        }  else if (id == R.id.nav_logout) {
+        } else if(id==R.id.privacy_policy){
+            Intent intent=new Intent(MainActivity.this,PrivacyPolicyActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_logout) {
             AuthUI.getInstance().signOut(this);
         }
 
